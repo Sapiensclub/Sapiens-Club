@@ -1,5 +1,6 @@
 import { Doodle } from "@/components/doodles/doodle";
 import { MoonDoodle } from "@/components/doodles/extras";
+import { Reveal } from "@/components/reveal";
 import {
   getJourneyStages,
   getHomeSection,
@@ -89,18 +90,17 @@ export async function S6Celestial() {
         </p>
 
         <div className="mt-14 grid gap-8 md:grid-cols-3">
-          {CARDS.map(({ title, body }) => (
-            <div
-              key={title}
-              className="sketch-border border-2 border-moonlight/40 px-7 py-8 text-center"
-            >
-              <h3 className="font-display text-2xl font-bold text-gold">
-                {title}
-              </h3>
-              <p className="mt-3 text-sm leading-relaxed text-moonlight">
-                {body}
-              </p>
-            </div>
+          {CARDS.map(({ title, body }, idx) => (
+            <Reveal key={title} delay={idx * 150}>
+              <div className="sketch-border h-full border-2 border-moonlight/40 px-7 py-8 text-center">
+                <h3 className="font-display text-2xl font-bold text-gold">
+                  {title}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-moonlight">
+                  {body}
+                </p>
+              </div>
+            </Reveal>
           ))}
         </div>
       </div>

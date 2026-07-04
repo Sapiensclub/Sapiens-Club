@@ -373,6 +373,344 @@ h2 {
 }
 
 /* ---------------------------------------------------------------------
+ * MOTION PASS (spec §14 stage 6). Everything here keys off html.m, set by
+ * an inline script only when JS runs AND the visitor allows motion — so
+ * no-JS and reduced-motion visitors always see the finished page.
+ * The hero choreography starts when .s1-go appears (section in view);
+ * html.intro-live shifts the delays to let the logo intro play first.
+ * ------------------------------------------------------------------- */
+
+/* headline words sketch in one by one (~1.2s total) */
+html.m .hero-title .word {
+  display: inline-block;
+  opacity: 0;
+}
+html.m .s1-go .hero-title .word {
+  animation: word-in 340ms ease-out forwards;
+  animation-delay: calc(0.15s + var(--wi) * 80ms);
+}
+html.m.intro-live .s1-go .hero-title .word {
+  animation-delay: calc(2.5s + var(--wi) * 80ms);
+}
+@keyframes word-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) rotate(-1.5deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* the spark circle scribbles itself around "helping" after the headline */
+html.m .hero-circle {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+html.m .s1-go .hero-circle {
+  animation: dd-draw 600ms ease-in-out forwards;
+  animation-delay: 1.5s;
+}
+html.m.intro-live .s1-go .hero-circle {
+  animation-delay: 3.9s;
+}
+
+/* sub + micro-line fade up */
+html.m .hero-sub {
+  opacity: 0;
+}
+html.m .s1-go .hero-sub {
+  animation: sub-up 500ms ease-out forwards;
+  animation-delay: 1.6s;
+}
+html.m.intro-live .s1-go .hero-sub {
+  animation-delay: 4s;
+}
+@keyframes sub-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* CTAs pop with overshoot (0.9 → 1.05 → 1) */
+html.m .hero-cta {
+  display: inline-block;
+  opacity: 0;
+}
+html.m .s1-go .hero-cta {
+  animation: cta-pop 450ms cubic-bezier(0.3, 1.56, 0.5, 1) forwards;
+  animation-delay: calc(1.9s + var(--ci) * 140ms);
+}
+html.m.intro-live .s1-go .hero-cta {
+  animation-delay: calc(4.3s + var(--ci) * 140ms);
+}
+@keyframes cta-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* --- vignette loops (staggered ~4s rhythms, after the line-draw) --- */
+
+/* umbrella: rain keeps falling */
+html.m .doodle-drawn .dd.rain {
+  animation:
+    dd-draw 750ms ease-out forwards,
+    rain-fall 2s linear infinite;
+  animation-delay:
+    calc(var(--dd-delay, 0ms) + var(--i, 0) * 110ms),
+    calc(1.4s + var(--i, 0) * 450ms);
+}
+@keyframes rain-fall {
+  0% {
+    transform: translateY(-7px);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+}
+
+/* umbrella figures bob happily */
+html.m .doodle-drawn .fig {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: fig-bob 2.6s ease-in-out 1.6s infinite;
+}
+html.m .doodle-drawn .fig-b {
+  animation-delay: 2.2s;
+}
+@keyframes fig-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2.5px);
+  }
+}
+
+/* tiffin: steam curls rise, sparkle twinkles */
+html.m .doodle-drawn .dd.steam {
+  animation:
+    dd-draw 750ms ease-out forwards,
+    steam-rise 2.8s ease-in-out infinite;
+  animation-delay:
+    calc(var(--dd-delay, 0ms) + var(--i, 0) * 110ms),
+    1.6s;
+}
+html.m .doodle-drawn .dd.steam-b {
+  animation-delay:
+    calc(var(--dd-delay, 0ms) + var(--i, 0) * 110ms),
+    2.5s;
+}
+@keyframes steam-rise {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-3.5px);
+    opacity: 0.55;
+  }
+}
+
+html.m .doodle-drawn .ddf.twinkle {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation:
+    dd-pop 350ms cubic-bezier(0.3, 1.6, 0.5, 1) forwards,
+    twinkle 4s ease-in-out infinite;
+  animation-delay: calc(var(--dd-delay, 0ms) + 700ms), 2s;
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.8);
+  }
+}
+
+/* high-five: the spark burst pulses */
+html.m .doodle-drawn .ddf.burst {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation:
+    dd-pop 350ms cubic-bezier(0.3, 1.6, 0.5, 1) forwards,
+    burst-pulse 4s ease-in-out infinite;
+  animation-delay: calc(var(--dd-delay, 0ms) + 700ms), 2.8s;
+}
+@keyframes burst-pulse {
+  0%,
+  24%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  12% {
+    opacity: 1;
+    transform: scale(1.18);
+  }
+}
+
+/* clouds drift slowly (translate composes with the parallax transform) */
+html.m .cloud-drift {
+  animation: cloud-drift var(--drift, 90s) ease-in-out infinite alternate;
+}
+@keyframes cloud-drift {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: 36px 6px;
+  }
+}
+
+/* mouse parallax layers (desktop only; JS sets --plx-x / --plx-y) */
+html.m [data-plx] {
+  display: block;
+  transition: transform 0.25s ease-out;
+}
+html.m [data-plx="1"] {
+  transform: translate(
+    calc(var(--plx-x, 0) * 8px),
+    calc(var(--plx-y, 0) * 8px)
+  );
+}
+html.m [data-plx="2"] {
+  transform: translate(
+    calc(var(--plx-x, 0) * -5px),
+    calc(var(--plx-y, 0) * -5px)
+  );
+}
+
+/* doodles wiggle ±2° when the cursor comes close */
+html.m .wiggling {
+  animation: wiggle 0.5s ease-in-out infinite alternate;
+}
+@keyframes wiggle {
+  from {
+    rotate: -2deg;
+  }
+  to {
+    rotate: 2deg;
+  }
+}
+
+/* paper plane: crosses the hero every ~12s on a curved path */
+.plane-flyer,
+.plane-trail {
+  display: none;
+}
+html.m .plane-flyer {
+  display: block;
+  offset-path: path("M -60 480 C 260 320, 620 520, 1260 220");
+  offset-rotate: auto 14deg;
+  animation: plane-fly 12s linear infinite;
+  opacity: 0;
+}
+@keyframes plane-fly {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  58% {
+    opacity: 1;
+  }
+  66% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+html.m .plane-trail {
+  display: block;
+  opacity: 0;
+  animation: trail-fade 12s linear infinite;
+}
+@keyframes trail-fade {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.5;
+  }
+  52% {
+    opacity: 0.5;
+  }
+  68% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* scroll cue bobs gently */
+html.m .bob-cue {
+  animation: cue-bob 2s ease-in-out infinite;
+}
+@keyframes cue-bob {
+  0%,
+  100% {
+    transform: translate(-50%, 0) rotate(90deg);
+  }
+  50% {
+    transform: translate(-50%, 7px) rotate(90deg);
+  }
+}
+
+/* --- scroll entrances (Reveal component) --- */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(18px);
+}
+.reveal-stamp {
+  opacity: 0;
+  transform: rotate(-30deg) scale(1.4);
+}
+.reveal-in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+
+/* ---------------------------------------------------------------------
  * WAITLIST SUCCESS CONFETTI — six doodle sparks pop outward once.
  * ------------------------------------------------------------------- */
 .confetti {

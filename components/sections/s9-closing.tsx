@@ -1,6 +1,7 @@
 import { ButtonLink } from "@/components/buttons";
 import { Doodle } from "@/components/doodles/doodle";
 import { SunriseDoodle } from "@/components/doodles/extras";
+import { Reveal } from "@/components/reveal";
 import { getHomeSection } from "@/sanity/content";
 
 /*
@@ -13,12 +14,14 @@ export async function S9Closing() {
       <Doodle className="mx-auto block w-56 text-ink">
         <SunriseDoodle title="The sun rising over the horizon" />
       </Doodle>
-      <h2 className="mx-auto mt-8 max-w-2xl">
-        {hs?.heading ?? "The sun rises one act of kindness at a time."}
-      </h2>
-      <div className="mt-10">
-        <ButtonLink href="#join">Join the movement</ButtonLink>
-      </div>
+      <Reveal>
+        <h2 className="mx-auto mt-8 max-w-2xl">
+          {hs?.heading ?? "The sun rises one act of kindness at a time."}
+        </h2>
+        <div className="mt-10">
+          <ButtonLink href="#join">Join the movement</ButtonLink>
+        </div>
+      </Reveal>
     </section>
   );
 }

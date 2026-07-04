@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LogoMark } from "./logo";
 import { SOLE, TOES, TOE_HEADS } from "./logo-paths";
 
@@ -26,25 +26,47 @@ const BODY_STROKES = [
 ];
 
 export function LogoAnimated({ className = "" }: { className?: string }) {
+  const wrapRef = useRef<HTMLSpanElement>(null);
   const [mode, setMode] = useState<"static" | "play">("static");
 
+  /*
+   * The intro starts only when the logo scrolls INTO VIEW (it sits in the
+   * living-doodle hero, below the minimal hero) — otherwise it would play
+   * unseen on page load. html gets .intro-live while playing so the
+   * headline sequence can wait for it (see globals.css).
+   */
   useEffect(() => {
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
     if (reduced || sessionStorage.getItem("sapiens_intro_seen")) return;
-    sessionStorage.setItem("sapiens_intro_seen", "1");
-    setMode("play");
+    const el = wrapRef.current;
+    if (!el) return;
 
+    let timer: ReturnType<typeof setTimeout> | undefined;
     const finish = () => setMode("static");
-    const timer = setTimeout(finish, 2600);
     const skip = () => {
       clearTimeout(timer);
       finish();
     };
-    window.addEventListener("scroll", skip, { once: true, passive: true });
-    window.addEventListener("pointerdown", skip, { once: true });
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        io.disconnect();
+        sessionStorage.setItem("sapiens_intro_seen", "1");
+        document.documentElement.classList.add("intro-live");
+        setMode("play");
+        timer = setTimeout(finish, 2600);
+        window.addEventListener("scroll", skip, { once: true, passive: true });
+        window.addEventListener("pointerdown", skip, { once: true });
+      },
+      { threshold: 0.5 }
+    );
+    io.observe(el);
+
     return () => {
+      io.disconnect();
       clearTimeout(timer);
       window.removeEventListener("scroll", skip);
       window.removeEventListener("pointerdown", skip);
@@ -52,7 +74,11 @@ export function LogoAnimated({ className = "" }: { className?: string }) {
   }, []);
 
   if (mode === "static") {
-    return <LogoMark className={className} title="Sapiens footprint logo" />;
+    return (
+      <span ref={wrapRef} className="inline-block">
+        <LogoMark className={className} title="Sapiens footprint logo" />
+      </span>
+    );
   }
 
   return (

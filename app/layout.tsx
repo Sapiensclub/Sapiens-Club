@@ -45,11 +45,15 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* apply saved night mode before first paint — prevents a light flash */}
+        {/* before first paint: apply saved night mode, and mark 'm' when
+            motion is allowed (JS present + no reduced-motion preference).
+            All scroll/entrance animations key off html.m, so no-JS and
+            reduced-motion visitors always get the complete static page. */}
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "try{if(localStorage.getItem('sapiens-theme')==='night')document.documentElement.setAttribute('data-mode','night')}catch(e){}",
+              "try{if(localStorage.getItem('sapiens-theme')==='night')document.documentElement.setAttribute('data-mode','night')}catch(e){}" +
+              "if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('m');",
           }}
         />
       </head>

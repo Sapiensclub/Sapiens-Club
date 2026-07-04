@@ -1,4 +1,5 @@
 import { ButtonLink } from "@/components/buttons";
+import { Reveal } from "@/components/reveal";
 import { getHomeSection } from "@/sanity/content";
 
 /*
@@ -24,19 +25,21 @@ export async function S7Movement() {
         </p>
 
         {/* organizations ribbon */}
-        <div className="sketch-border mt-16 border-2 border-ink/70 bg-paper/90 px-8 py-8">
-          <p className="text-lg font-semibold">
-            A campus? A company? A housing society? Bring Sapiens to your
-            community first.
-          </p>
-          <ButtonLink
-            href="/club#organizations"
-            variant="secondary"
-            className="mt-5"
-          >
-            For organizations
-          </ButtonLink>
-        </div>
+        <Reveal>
+          <div className="sketch-border mt-16 border-2 border-ink/70 bg-paper/90 px-8 py-8">
+            <p className="text-lg font-semibold">
+              A campus? A company? A housing society? Bring Sapiens to your
+              community first.
+            </p>
+            <ButtonLink
+              href="/club#organizations"
+              variant="secondary"
+              className="mt-5"
+            >
+              For organizations
+            </ButtonLink>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

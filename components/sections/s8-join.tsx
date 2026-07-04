@@ -1,5 +1,6 @@
 import { ButtonLink } from "@/components/buttons";
 import { WaitlistForm } from "@/components/forms/waitlist-form";
+import { Reveal } from "@/components/reveal";
 import { getSiteSettings, getHomeSection } from "@/sanity/content";
 
 /*
@@ -26,15 +27,18 @@ export async function S8Join() {
 
         <div className="mt-14 grid items-start gap-10 lg:grid-cols-2">
           {/* Tier 1 — join the movement */}
-          <div className="flex flex-col items-start gap-6">
+          <Reveal className="flex flex-col items-start gap-6">
             <h3 className="font-display text-2xl font-bold">
               Join the movement
             </h3>
             <WaitlistForm source="hero" cities={site.cities} />
-          </div>
+          </Reveal>
 
           {/* Tier 2 — Founding Sapiens */}
-          <div className="sketch-border flex flex-col items-start gap-5 border-2 border-ink/60 bg-paper px-8 py-9">
+          <Reveal
+            delay={150}
+            className="sketch-border flex flex-col items-start gap-5 border-2 border-ink/60 bg-paper px-8 py-9"
+          >
             <h3 className="font-display text-2xl font-bold">
               Become a Founding Sapiens
             </h3>
@@ -58,7 +62,7 @@ export async function S8Join() {
             <p className="text-sm opacity-70">
               Applications are read by humans. Every single one.
             </p>
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>

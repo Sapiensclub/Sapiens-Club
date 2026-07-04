@@ -3,6 +3,7 @@ import { WaitlistForm } from "@/components/forms/waitlist-form";
 import { Doodle } from "@/components/doodles/doodle";
 import { ToteBag } from "@/components/doodles/basics";
 import { TeeDoodle, MugDoodle } from "@/components/doodles/extras";
+import { Reveal } from "@/components/reveal";
 import { getShopItems, type ShopItem } from "@/sanity/content";
 
 export const metadata: Metadata = {
@@ -45,12 +46,18 @@ export default async function ShopPage() {
               <Doodle className="h-32 w-32 text-ink" delay={idx * 150}>
                 <Art className="h-full w-full" title={name} />
               </Doodle>
-              <span
-                aria-hidden
-                className="absolute top-6 -rotate-12 border-[3px] border-clay px-3 py-1 font-display text-sm font-bold tracking-widest text-clay uppercase"
+              <Reveal
+                effect="stamp"
+                delay={200 + idx * 150}
+                className="absolute top-6"
               >
-                {stampText}
-              </span>
+                <span
+                  aria-hidden
+                  className="block -rotate-12 border-[3px] border-clay px-3 py-1 font-display text-sm font-bold tracking-widest text-clay uppercase"
+                >
+                  {stampText}
+                </span>
+              </Reveal>
               <p className="font-bold">{name}</p>
             </div>
           );

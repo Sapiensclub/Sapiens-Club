@@ -1,5 +1,6 @@
 import { Doodle } from "@/components/doodles/doodle";
 import { DoorA, DoorB } from "@/components/doodles/vignettes";
+import { Reveal } from "@/components/reveal";
 import { getHomeSection } from "@/sanity/content";
 
 /*
@@ -32,24 +33,25 @@ export async function S3Idea() {
       </p>
 
       <div className="mt-14 grid gap-8 sm:grid-cols-2">
-        {DOORS.map(({ Door, title, body, alt }) => (
-          <div
-            key={title}
-            className="door-card sketch-border flex flex-col items-center gap-5 border-2 border-ink/60 px-8 py-10"
-          >
-            <Doodle className="w-20 text-ink">
-              <Door title={alt} />
-            </Doodle>
-            <h3 className="font-display text-2xl font-bold">{title}</h3>
-            <p className="leading-relaxed">{body}</p>
-          </div>
+        {DOORS.map(({ Door, title, body, alt }, idx) => (
+          <Reveal key={title} delay={idx * 150}>
+            <div className="door-card sketch-border flex h-full flex-col items-center gap-5 border-2 border-ink/60 px-8 py-10">
+              <Doodle className="w-20 text-ink">
+                <Door title={alt} />
+              </Doodle>
+              <h3 className="font-display text-2xl font-bold">{title}</h3>
+              <p className="leading-relaxed">{body}</p>
+            </div>
+          </Reveal>
         ))}
       </div>
 
-      <p className="mx-auto mt-14 max-w-2xl text-lg italic leading-relaxed">
-        When A helps B, they may never meet again. But someday, Z will help B.
-        That is how a society learns to trust itself.
-      </p>
+      <Reveal>
+        <p className="mx-auto mt-14 max-w-2xl text-lg italic leading-relaxed">
+          When A helps B, they may never meet again. But someday, Z will help
+          B. That is how a society learns to trust itself.
+        </p>
+      </Reveal>
     </section>
   );
 }

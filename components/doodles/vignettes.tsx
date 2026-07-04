@@ -54,11 +54,15 @@ export function UmbrellaShare(p: DoodleProps) {
       />
       {/* pole + hook */}
       <path {...S} pathLength={1} className="dd" d="M57 30 L57 78 C57 84 63 84 63 80" style={i(2)} />
-      {/* two figures */}
-      <circle {...S} pathLength={1} className="dd" cx="44" cy="58" r="6" style={i(3)} />
-      <path {...S} pathLength={1} className="dd" d="M44 64 C43 74 43 80 44 88" style={i(3)} />
-      <circle {...S} pathLength={1} className="dd" cx="72" cy="58" r="6" style={i(4)} />
-      <path {...S} pathLength={1} className="dd" d="M72 64 C73 74 73 80 72 88" style={i(4)} />
+      {/* two figures — .fig groups bob happily in the hero loop */}
+      <g className="fig">
+        <circle {...S} pathLength={1} className="dd" cx="44" cy="58" r="6" style={i(3)} />
+        <path {...S} pathLength={1} className="dd" d="M44 64 C43 74 43 80 44 88" style={i(3)} />
+      </g>
+      <g className="fig fig-b">
+        <circle {...S} pathLength={1} className="dd" cx="72" cy="58" r="6" style={i(4)} />
+        <path {...S} pathLength={1} className="dd" d="M72 64 C73 74 73 80 72 88" style={i(4)} />
+      </g>
       {/* rain, outside the canopy */}
       <path {...S} pathLength={1} className="dd rain" d="M8 20 L5 28" style={i(5)} />
       <path {...S} pathLength={1} className="dd rain" d="M112 24 L109 32" style={i(5)} />
@@ -78,12 +82,12 @@ export function TiffinPass(p: DoodleProps) {
       <path {...S} pathLength={1} className="dd" d="M50 38 L74 38 L73 46 C65 48 58 48 51 46 Z" style={i(2)} />
       <path {...S} pathLength={1} className="dd" d="M51 48 L73 48 L72 56 C65 58 59 58 52 56 Z" style={i(2)} />
       <path {...S} pathLength={1} className="dd" d="M56 37 C56 29 68 29 68 37" style={i(3)} />
-      {/* steam */}
-      <path {...S} pathLength={1} className="dd" d="M58 24 C55 20 61 16 58 11" style={i(4)} />
-      <path {...S} pathLength={1} className="dd" d="M66 24 C69 19 63 15 66 10" style={i(4)} />
-      {/* sparkle on the handoff */}
+      {/* steam — curls rise on loop */}
+      <path {...S} pathLength={1} className="dd steam" d="M58 24 C55 20 61 16 58 11" style={i(4)} />
+      <path {...S} pathLength={1} className="dd steam steam-b" d="M66 24 C69 19 63 15 66 10" style={i(4)} />
+      {/* sparkle on the handoff — twinkles on loop */}
       <path
-        className="ddf"
+        className="ddf twinkle"
         fill="var(--color-spark)"
         d="M44 56 C44.7 59 46 60.3 49 61 C46 61.7 44.7 63 44 66 C43.3 63 42 61.7 39 61 C42 60.3 43.3 59 44 56 Z"
       />
@@ -105,8 +109,8 @@ export function HighFive(p: DoodleProps) {
       <path {...S} pathLength={1} className="dd" d="M86 38 C88 52 88 62 87 78" style={i(2)} />
       <path {...S} pathLength={1} className="dd" d="M87 78 L80 92 M87 78 L94 92" style={i(3)} />
       <path {...S} pathLength={1} className="dd" d="M86 44 C78 40 70 34 64 26" style={i(3)} />
-      {/* spark burst where the hands meet */}
-      <g className="ddf" stroke="var(--color-spark)" strokeWidth={2.5} strokeLinecap="round">
+      {/* spark burst where the hands meet — pulses on loop */}
+      <g className="ddf burst" stroke="var(--color-spark)" strokeWidth={2.5} strokeLinecap="round">
         <path d="M60 14 L60 7" />
         <path d="M51 17 L46 12" />
         <path d="M69 17 L74 12" />

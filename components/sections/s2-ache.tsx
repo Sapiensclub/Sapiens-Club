@@ -1,12 +1,11 @@
-import { Doodle } from "@/components/doodles/doodle";
-import { PeopleBackToBack } from "@/components/doodles/vignettes";
+import { Reveal } from "@/components/reveal";
+import { AcheFigures } from "./s2-figures";
 import { getHomeSection } from "@/sanity/content";
 
 /*
  * S2 · THE ACHE (spec §6-S2) — quiet contrast; motion nearly stops.
- * No statistic, purely emotional. Stage 6 adds: lines fading in one at a
- * time on scroll, and the back-to-back figures crossfading to the facing
- * pose at the section's midpoint (that turn IS the emotional beat).
+ * No statistic, purely emotional. The three lines fade in one at a time;
+ * the figures turn to face each other at the section's midpoint.
  */
 const LINES = [
   "Everything is one tap away — food, rides, entertainment. Everything except each other.",
@@ -23,15 +22,13 @@ export async function S2Ache() {
           "We have never been more connected. And never more alone."}
       </h2>
       <div className="mt-14 space-y-10">
-        {LINES.map((line) => (
-          <p key={line} className="text-lg leading-relaxed md:text-xl">
-            {line}
-          </p>
+        {LINES.map((line, idx) => (
+          <Reveal key={line} delay={idx * 250}>
+            <p className="text-lg leading-relaxed md:text-xl">{line}</p>
+          </Reveal>
         ))}
       </div>
-      <Doodle className="mx-auto mt-16 block w-48 text-ink">
-        <PeopleBackToBack title="Two people back to back, each looking at a phone" />
-      </Doodle>
+      <AcheFigures />
     </section>
   );
 }

@@ -10,6 +10,7 @@ import {
   UmbrellaShare,
   HighFive,
 } from "@/components/doodles/vignettes";
+import { Reveal } from "@/components/reveal";
 import { getStories, getHomeSection, type Story } from "@/sanity/content";
 
 /*
@@ -66,16 +67,15 @@ export async function S5Moments() {
           {stories.map(({ title, body, doodleKey }, idx) => {
             const Art = DOODLES[doodleKey] ?? HeartDoodle;
             return (
-              <article
-                key={title}
-                className="sketch-border flex flex-col items-center gap-5 border-2 border-ink/40 bg-paper px-7 py-9 text-center"
-              >
-                <Doodle className="h-16 w-20 text-ink" delay={idx * 200}>
-                  <Art className="h-full w-full" />
-                </Doodle>
-                <h3 className="font-display text-2xl font-bold">{title}</h3>
-                <p className="text-sm leading-relaxed">{body}</p>
-              </article>
+              <Reveal key={title} delay={idx * 150}>
+                <article className="sketch-border flex h-full flex-col items-center gap-5 border-2 border-ink/40 bg-paper px-7 py-9 text-center">
+                  <Doodle className="h-16 w-20 text-ink" delay={idx * 200}>
+                    <Art className="h-full w-full" />
+                  </Doodle>
+                  <h3 className="font-display text-2xl font-bold">{title}</h3>
+                  <p className="text-sm leading-relaxed">{body}</p>
+                </article>
+              </Reveal>
             );
           })}
         </div>

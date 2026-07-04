@@ -49,7 +49,7 @@ export async function S0MinimalHero() {
       <a
         href="#world"
         aria-label="Scroll to see more"
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 rotate-90"
+        className="bob-cue absolute bottom-6 left-1/2 -translate-x-1/2 rotate-90"
       >
         <ArrowCurved className="w-10 text-ink/60" />
       </a>
