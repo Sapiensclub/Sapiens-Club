@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+/*
+ * Sapiens design tokens (spec §2.1).
+ * Tailwind v4: tokens declared here become utility classes automatically,
+ * e.g. `bg-paper`, `text-ink`, `bg-spark`, `text-moonlight`, `font-display`.
+ */
+@theme {
+  --color-paper: #f7f4ec; /* day background — warm off-white */
+  --color-ink: #141414; /* text, doodles, logo */
+  --color-spark: #f59e2d; /* THE accent: CTAs, doodle highlights, Moneta, sun warmth */
+  --color-night: #17142e; /* celestial section bg (deep indigo) */
+  --color-nightdeep: #0b0a18; /* celestial vignette edges */
+  --color-moonlight: #cdd6ff; /* stars, moon glow, night-section secondary text */
+  --color-gold: #f0c078; /* sun stage, Goodness Meter fill, milestone dots */
+  --color-clay: #d85a30; /* rare warm secondary (badges only) */
+  --color-dawn: #fbf3e4; /* dawn paper — S8/S9 + footer background */
+
+  --font-display: var(--font-cabin-sketch); /* headlines only, never below 28px */
+  --font-body: var(--font-nunito-sans); /* everything readable */
+}
+
+/* The homepage animates this background paper -> night -> dawn on scroll (spec §8.6). */
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+h1,
+h2 {
+  font-family: var(--font-display), cursive;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  line-height: 1.15;
+}
+
+/* Visible keyboard focus everywhere (spec §13) */
+:focus-visible {
+  outline: 2px solid var(--color-spark);
+  outline-offset: 3px;
+}
