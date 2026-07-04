@@ -9,11 +9,18 @@ import { NextRequest, NextResponse } from "next/server";
  * Publishing in the studio then refreshes the live site within seconds.
  */
 export async function POST(req: NextRequest) {
-  const secret =
+  const raw =
     req.nextUrl.searchParams.get("secret") ??
     req.headers.get("sanity-webhook-secret");
+  const expected = process.env.SANITY_REVALIDATE_SECRET;
 
-  if (!secret || secret !== process.env.SANITY_REVALIDATE_SECRET) {
+  /*
+   * The secret may contain '+', which URL query parsing decodes to a
+   * space when the webhook URL wasn't percent-encoded. Accept both
+   * readings so the webhook works either way.
+   */
+  const candidates = raw ? [raw, raw.replace(/ /g, "+")] : [];
+  if (!expected || !candidates.includes(expected)) {
     return NextResponse.json({ ok: false }, { status: 401 });
   }
 
