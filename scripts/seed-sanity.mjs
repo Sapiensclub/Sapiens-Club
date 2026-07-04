@@ -65,6 +65,14 @@ const docs = [
     dismissible: true,
   },
 
+  {
+    _id: "minimalHero",
+    _type: "minimalHero",
+    wordmark: "Sapiens",
+    tagline: "Real people, helping real people, nearby.",
+    ctaLabel: "Join the movement",
+  },
+
   /* home section headings (fallbacks match these exactly) */
   { _id: "homeSection.s2", _type: "homeSection", key: "s2", heading: "We have never been more connected. And never more alone." },
   { _id: "homeSection.s3", _type: "homeSection", key: "s3", heading: "The anti-social-network. Built for real life." },

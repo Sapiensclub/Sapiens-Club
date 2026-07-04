@@ -86,6 +86,42 @@ export async function getCampaignBanner(): Promise<CampaignBanner | null> {
   );
 }
 
+/* ---- minimal hero (top of homepage) ---- */
+
+export type MinimalHero = {
+  wordmark: string;
+  tagline?: string;
+  ctaLabel: string;
+  logoUrl?: string;
+  logoWidth?: number;
+  logoHeight?: number;
+};
+
+const MINIMAL_HERO_FALLBACK: MinimalHero = {
+  wordmark: "Sapiens",
+  ctaLabel: "Join the movement",
+};
+
+export async function getMinimalHero(): Promise<MinimalHero> {
+  const cms = await cmsFetch<Partial<MinimalHero> | null>(
+    groq`*[_type == "minimalHero"][0]{
+      wordmark, tagline, ctaLabel,
+      "logoUrl": logo.asset->url,
+      "logoWidth": logo.asset->metadata.dimensions.width,
+      "logoHeight": logo.asset->metadata.dimensions.height
+    }`,
+    null
+  );
+  return {
+    ...MINIMAL_HERO_FALLBACK,
+    ...(cms
+      ? Object.fromEntries(
+          Object.entries(cms).filter(([, v]) => v !== null && v !== "")
+        )
+      : {}),
+  };
+}
+
 /* ---- stories (S5) ---- */
 
 export type Story = {

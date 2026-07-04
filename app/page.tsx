@@ -1,3 +1,4 @@
+import { S0MinimalHero } from "@/components/sections/s0-minimal-hero";
 import { S1Hero } from "@/components/sections/s1-hero";
 import { S2Ache } from "@/components/sections/s2-ache";
 import { S3Idea } from "@/components/sections/s3-idea";
@@ -16,6 +17,7 @@ import { S9Closing } from "@/components/sections/s9-closing";
 export default function Home() {
   return (
     <>
+      <S0MinimalHero />
       <S1Hero />
       <S2Ache />
       <S3Idea />

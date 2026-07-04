@@ -25,7 +25,10 @@ import { getSiteSettings } from "@/sanity/content";
 export async function S1Hero() {
   const site = await getSiteSettings();
   return (
-    <section className="relative flex min-h-[calc(100vh-64px)] flex-col overflow-hidden">
+    <section
+      id="world"
+      className="relative flex min-h-[calc(100vh-64px)] flex-col overflow-hidden"
+    >
       <div className="relative mx-auto flex w-full max-w-6xl flex-1 items-center px-6 py-14">
         {/* headline block, center-left on desktop */}
         <div className="relative z-10 flex max-w-2xl flex-col items-start gap-6 lg:w-[60%]">

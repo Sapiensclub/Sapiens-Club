@@ -13,7 +13,7 @@ import { schemaTypes } from "./sanity/schemas";
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "sqbrcyhy";
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
 
-const SINGLETONS = ["siteSettings", "campaignBanner"];
+const SINGLETONS = ["siteSettings", "campaignBanner", "minimalHero"];
 
 export default defineConfig({
   name: "sapiens",
@@ -40,6 +40,12 @@ export default defineConfig({
                 S.document()
                   .schemaType("campaignBanner")
                   .documentId("campaignBanner")
+              ),
+            S.listItem()
+              .title("Minimal hero")
+              .id("minimalHero")
+              .child(
+                S.document().schemaType("minimalHero").documentId("minimalHero")
               ),
             S.divider(),
             ...S.documentTypeListItems().filter(

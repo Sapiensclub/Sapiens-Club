@@ -127,6 +127,43 @@ export const campaignBanner = defineType({
   },
 });
 
+export const minimalHero = defineType({
+  name: "minimalHero",
+  title: "Minimal hero (top of homepage)",
+  type: "document",
+  fields: [
+    defineField({
+      name: "wordmark",
+      title: "Wordmark",
+      type: "string",
+      initialValue: "Sapiens",
+    }),
+    defineField({
+      name: "tagline",
+      title: "Tagline (optional, one short line)",
+      type: "string",
+      description:
+        "Keep it short and distinct from the vision line in the section below.",
+    }),
+    defineField({
+      name: "ctaLabel",
+      title: "Button label",
+      type: "string",
+      initialValue: "Join the movement",
+    }),
+    defineField({
+      name: "logo",
+      title: "Logo (optional override)",
+      type: "image",
+      description:
+        "Leave empty to use the built-in footprint-S (recommended — it adapts to night mode).",
+    }),
+  ],
+  preview: {
+    select: { title: "wordmark", subtitle: "tagline" },
+  },
+});
+
 export const homeSection = defineType({
   name: "homeSection",
   title: "Home section",
@@ -319,6 +356,7 @@ export const shopTeaseItem = defineType({
 export const schemaTypes = [
   siteSettings,
   campaignBanner,
+  minimalHero,
   homeSection,
   story,
   faqItem,
