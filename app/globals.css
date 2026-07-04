@@ -324,6 +324,34 @@ h2 {
 }
 
 /* ---------------------------------------------------------------------
+ * MARQUEE (hero bottom edge) — slow continuous scroll; the track holds
+ * two copies of the content, so sliding by -50% loops seamlessly.
+ * ------------------------------------------------------------------- */
+.marquee {
+  overflow: hidden;
+}
+.marquee-track {
+  width: max-content;
+  animation: marquee 36s linear infinite;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------------------------------------------------------------------
+ * DOOR CARDS (S3) — hovering the card cracks the door open with spark
+ * light spilling out.
+ * ------------------------------------------------------------------- */
+.door-card .door-light {
+  transition: opacity 300ms ease-out;
+}
+.door-card:hover .door-light {
+  opacity: 0.55;
+}
+
+/* ---------------------------------------------------------------------
  * REDUCED MOTION — render everything in its final state (spec §2.3/§13).
  * JS gates most animations already; this is the safety net.
  * ------------------------------------------------------------------- */
@@ -355,5 +383,8 @@ h2 {
   .diya-flame-b {
     animation: none;
     opacity: 0;
+  }
+  .marquee-track {
+    animation: none;
   }
 }

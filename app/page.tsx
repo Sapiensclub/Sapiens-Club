@@ -1,37 +1,30 @@
-import { LogoAnimated } from "@/components/logo-animated";
-import { ButtonLink } from "@/components/buttons";
-import { site } from "@/lib/site";
+import { S1Hero } from "@/components/sections/s1-hero";
+import { S2Ache } from "@/components/sections/s2-ache";
+import { S3Idea } from "@/components/sections/s3-idea";
+import { S4How } from "@/components/sections/s4-how";
+import { S5Moments } from "@/components/sections/s5-moments";
+import { S6Celestial } from "@/components/sections/s6-celestial";
+import { S7Movement } from "@/components/sections/s7-movement";
+import { S8Join } from "@/components/sections/s8-join";
+import { S9Closing } from "@/components/sections/s9-closing";
 
 /*
- * Temporary placeholder home page — replaced by the full S1–S9 homepage in
- * build-order stage 3. Exists so sapiens.club can go live on Vercel early,
- * and to exercise the stage-2 components (logo intro, buttons).
+ * Home — S1–S9 (spec §6). Background choreography paper→night→dawn
+ * currently approximated with per-section backgrounds; stage 7 replaces
+ * it with one GSAP timeline animating the body background across scroll.
  */
 export default function Home() {
   return (
-    <section className="flex min-h-[calc(100vh-64px)] flex-col items-center justify-center gap-8 px-6 py-16 text-center">
-      <LogoAnimated className="h-40 w-auto md:h-52" />
-      <h1 className="max-w-3xl">
-        A society where <span className="text-spark">helping</span> each other
-        is the default — not the exception.
-      </h1>
-      <p className="max-w-xl text-lg leading-relaxed">
-        Sapiens is a community where real people help real people — offline,
-        nearby, for nothing in return.
-      </p>
-      <div className="flex flex-wrap items-center justify-center gap-5">
-        <ButtonLink href="/club">Join the movement</ButtonLink>
-        <ButtonLink
-          href={site.volunteerFormUrl}
-          variant="secondary"
-          title="Application link coming soon"
-        >
-          Become a founding volunteer
-        </ButtonLink>
-      </div>
-      <p className="text-sm font-semibold tracking-wide">
-        Launching in India, 2026. No app needed yet — just belief.
-      </p>
-    </section>
+    <>
+      <S1Hero />
+      <S2Ache />
+      <S3Idea />
+      <S4How />
+      <S5Moments />
+      <S6Celestial />
+      <S7Movement />
+      <S8Join />
+      <S9Closing />
+    </>
   );
 }

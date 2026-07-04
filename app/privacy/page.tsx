@@ -1,17 +1,91 @@
 import type { Metadata } from "next";
+import { site } from "@/lib/site";
 
-export const metadata: Metadata = { title: "Privacy — Sapiens" };
+export const metadata: Metadata = {
+  title: "Privacy — Sapiens",
+  description:
+    "What Sapiens collects (very little), why, where it lives, and how to have it deleted. No selling of data, no ads.",
+};
 
-/* Stub — full plain-English, DPDP-aware policy generated in stage 3 (§7). */
+/*
+ * OWNER SHOULD HAVE THESE PROFESSIONALLY REVIEWED BEFORE SCALE.
+ * Plain-English privacy policy for an India-based pre-launch site
+ * collecting email/phone/city with consent (DPDP Act-aware).
+ */
 export default function PrivacyPage() {
   return (
-    <section className="mx-auto flex min-h-[60vh] max-w-2xl flex-col items-center justify-center gap-6 px-6 py-24 text-center">
+    <article className="mx-auto max-w-[65ch] px-6 py-20 leading-relaxed">
       <h1>Privacy</h1>
-      <p className="text-lg leading-relaxed">
-        The short version, which will also be the long version: we collect the
-        minimum, we never sell your data, and we show no ads. The full policy
-        is being written.
+      <p className="mt-3 text-sm opacity-70">Last updated: 4 July 2026</p>
+
+      <p className="mt-8 text-lg">
+        The short version: we collect the minimum, we never sell it, and we
+        show no ads. The long version is below — written to be read, not
+        skimmed past.
       </p>
-    </section>
+
+      <h2 className="mt-12 !text-2xl">What we collect, and why</h2>
+      <ul className="mt-4 list-disc space-y-3 pl-5">
+        <li>
+          <strong>Waitlist:</strong> your email (required), phone (optional)
+          and city (optional) — so we can tell you when Sapiens launches,
+          especially in your city. You give this with an explicit consent
+          checkbox; unticked, nothing is stored.
+        </li>
+        <li>
+          <strong>Contact form:</strong> your name, email and message — so a
+          human can reply to you.
+        </li>
+        <li>
+          <strong>Analytics:</strong> anonymous usage events (pages viewed,
+          buttons clicked) via PostHog and Vercel Analytics, used only to
+          make the site better. No advertising cookies, no cross-site
+          tracking, no profiles built about you.
+        </li>
+      </ul>
+
+      <h2 className="mt-12 !text-2xl">Where it lives</h2>
+      <p className="mt-4">
+        Waitlist and contact submissions are stored in Supabase, our database
+        provider, protected by row-level security so they are not publicly
+        readable. Emails we send go through Resend. The site is hosted on
+        Vercel.
+      </p>
+
+      <h2 className="mt-12 !text-2xl">What we will never do</h2>
+      <ul className="mt-4 list-disc space-y-2 pl-5">
+        <li>Sell, rent or trade your data. To anyone. For anything.</li>
+        <li>Show you ads or let advertisers near your information.</li>
+        <li>Email you more than genuinely necessary — about one email a month.</li>
+      </ul>
+
+      <h2 className="mt-12 !text-2xl">Your rights</h2>
+      <p className="mt-4">
+        Under India&apos;s Digital Personal Data Protection Act, you can ask
+        what we hold about you, ask us to correct it, or ask us to delete it
+        entirely. One email to{" "}
+        <a
+          href={`mailto:${site.contactEmail}`}
+          className="font-bold underline decoration-spark decoration-2 underline-offset-4"
+        >
+          {site.contactEmail}
+        </a>{" "}
+        does any of the three — no forms, no friction. Unsubscribing from
+        emails is one click in any email we send.
+      </p>
+
+      <h2 className="mt-12 !text-2xl">Cookies</h2>
+      <p className="mt-4">
+        Only what analytics needs to count you once instead of twice. No
+        advertising or third-party marketing cookies.
+      </p>
+
+      <h2 className="mt-12 !text-2xl">Governing law</h2>
+      <p className="mt-4">
+        This policy is governed by the laws of India. If we ever change it
+        meaningfully, the date at the top changes and — if you&apos;re on
+        the waitlist — we&apos;ll tell you.
+      </p>
+    </article>
   );
 }

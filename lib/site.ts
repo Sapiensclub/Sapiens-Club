@@ -20,6 +20,12 @@ export const site = {
   instagramUrl: "https://www.instagram.com/sapiens.club_/",
   youtubeUrl: "https://www.youtube.com/channel/UC3k3-4i8uhwbmzCQIZ3NBGA",
   twitterUrl: "https://x.com/Sapiens_Clubb",
+  marqueeItems: [
+    "helping is human",
+    "trust is built one act at a time",
+    "no money. no feeds. just neighbours",
+    "the anti-social-network",
+  ],
   cities: [
     "Pune",
     "Mumbai",
