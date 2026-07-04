@@ -51,6 +51,82 @@ export const siteSettings = defineType({
   ],
 });
 
+export const campaignBanner = defineType({
+  name: "campaignBanner",
+  title: "Campaign banner",
+  type: "document",
+  description:
+    "Promotional banner at the very top of the homepage. Hidden unless enabled.",
+  fields: [
+    defineField({
+      name: "enabled",
+      title: "Enabled",
+      type: "boolean",
+      initialValue: false,
+      description: "Master switch. Off = no banner, homepage starts on the hero.",
+    }),
+    defineField({
+      name: "mode",
+      title: "Mode",
+      type: "string",
+      options: { list: ["bar", "large"], layout: "radio" },
+      initialValue: "bar",
+      description: "bar = slim strip · large = full promotional block with image",
+    }),
+    defineField({
+      name: "headline",
+      title: "Headline",
+      type: "string",
+      validation: (r) => r.required().warning("The banner needs a headline to show."),
+    }),
+    defineField({
+      name: "subtext",
+      title: "Subtext (large mode)",
+      type: "text",
+      rows: 2,
+    }),
+    defineField({
+      name: "image",
+      title: "Image (large mode, optional)",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({ name: "ctaLabel", title: "Button label (optional)", type: "string" }),
+    defineField({ name: "ctaUrl", title: "Button URL", type: "url", validation: (r) => r.uri({ allowRelative: true }) }),
+    defineField({
+      name: "theme",
+      title: "Theme",
+      type: "string",
+      options: { list: ["spark", "indigo", "paper"], layout: "radio" },
+      initialValue: "spark",
+    }),
+    defineField({
+      name: "dismissible",
+      title: "Dismissible",
+      type: "boolean",
+      initialValue: true,
+      description: "Visitors can close it; their choice is remembered until the banner is next edited.",
+    }),
+    defineField({
+      name: "startDate",
+      title: "Start showing (optional)",
+      type: "datetime",
+    }),
+    defineField({
+      name: "endDate",
+      title: "Stop showing (optional)",
+      type: "datetime",
+    }),
+  ],
+  preview: {
+    select: { title: "headline", subtitle: "mode", enabled: "enabled" },
+    prepare: ({ title, subtitle, enabled }) => ({
+      title: title || "(no headline)",
+      subtitle: `${enabled ? "ON" : "off"} · ${subtitle}`,
+    }),
+  },
+});
+
 export const homeSection = defineType({
   name: "homeSection",
   title: "Home section",
@@ -242,6 +318,7 @@ export const shopTeaseItem = defineType({
 
 export const schemaTypes = [
   siteSettings,
+  campaignBanner,
   homeSection,
   story,
   faqItem,

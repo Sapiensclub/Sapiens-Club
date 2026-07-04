@@ -11,12 +11,7 @@ export const site = {
   taglineHook: "The anti-social-network. Built for real life.",
   launchLine: "Launching in India, 2026.",
   contactEmail: "sapiensclub1@gmail.com",
-  /*
-   * ⚠️ Placeholder (spec §1): the Google Form URL provided was an /edit
-   * editor link visitors cannot open. Owner must supply the public share
-   * link (Send → link icon → ends in /viewform). Until then: "#".
-   */
-  volunteerFormUrl: "#",
+  volunteerFormUrl: "https://forms.gle/nK73qW328F6WkQjPA",
   instagramUrl: "https://www.instagram.com/sapiens.club_/",
   youtubeUrl: "https://www.youtube.com/channel/UC3k3-4i8uhwbmzCQIZ3NBGA",
   twitterUrl: "https://x.com/Sapiens_Clubb",

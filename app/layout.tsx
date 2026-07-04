@@ -3,6 +3,7 @@ import { Cabin_Sketch, Nunito_Sans } from "next/font/google";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { HideOnStudio } from "@/components/hide-on-studio";
+import { CampaignBanner } from "@/components/campaign-banner";
 import { getSiteSettings } from "@/sanity/content";
 import "./globals.css";
 
@@ -62,6 +63,7 @@ export default async function RootLayout({
               {announcement}
             </div>
           )}
+          <CampaignBanner />
           <Header />
         </HideOnStudio>
         <main id="content">{children}</main>

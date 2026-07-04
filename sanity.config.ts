@@ -13,7 +13,7 @@ import { schemaTypes } from "./sanity/schemas";
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "sqbrcyhy";
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
 
-const SINGLETON = "siteSettings";
+const SINGLETONS = ["siteSettings", "campaignBanner"];
 
 export default defineConfig({
   name: "sapiens",
@@ -29,21 +29,29 @@ export default defineConfig({
           .items([
             S.listItem()
               .title("Site settings")
-              .id(SINGLETON)
+              .id("siteSettings")
               .child(
-                S.document().schemaType(SINGLETON).documentId(SINGLETON)
+                S.document().schemaType("siteSettings").documentId("siteSettings")
+              ),
+            S.listItem()
+              .title("Campaign banner")
+              .id("campaignBanner")
+              .child(
+                S.document()
+                  .schemaType("campaignBanner")
+                  .documentId("campaignBanner")
               ),
             S.divider(),
             ...S.documentTypeListItems().filter(
-              (item) => item.getId() !== SINGLETON
+              (item) => !SINGLETONS.includes(item.getId() ?? "")
             ),
           ]),
     }),
   ],
   schema: {
     types: schemaTypes,
-    // don't offer "create new site settings" — it's a singleton
+    // don't offer "create new" for singletons
     templates: (templates) =>
-      templates.filter((t) => t.schemaType !== SINGLETON),
+      templates.filter((t) => !SINGLETONS.includes(t.schemaType)),
   },
 });

@@ -37,7 +37,7 @@ const docs = [
     taglineHook: "The anti-social-network. Built for real life.",
     launchLine: "Launching in India, 2026.",
     contactEmail: "sapiensclub1@gmail.com",
-    volunteerFormUrl: "#",
+    volunteerFormUrl: "https://forms.gle/nK73qW328F6WkQjPA",
     instagramUrl: "https://www.instagram.com/sapiens.club_/",
     youtubeUrl: "https://www.youtube.com/channel/UC3k3-4i8uhwbmzCQIZ3NBGA",
     twitterUrl: "https://x.com/Sapiens_Clubb",
@@ -51,6 +51,18 @@ const docs = [
       "Pune", "Mumbai", "Bengaluru", "Hyderabad", "Delhi NCR", "Chennai",
       "Kolkata", "Ahmedabad", "Jaipur", "Lucknow", "Indore", "Chandigarh", "Other",
     ],
+  },
+
+  {
+    _id: "campaignBanner",
+    _type: "campaignBanner",
+    enabled: false,
+    mode: "bar",
+    headline: "Founding Sapiens applications are open — 1000 places, read by humans.",
+    ctaLabel: "Apply now",
+    ctaUrl: "https://forms.gle/nK73qW328F6WkQjPA",
+    theme: "spark",
+    dismissible: true,
   },
 
   /* home section headings (fallbacks match these exactly) */

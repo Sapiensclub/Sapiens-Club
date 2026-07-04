@@ -52,6 +52,40 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   return merged;
 }
 
+/* ---- campaign banner (homepage top) ---- */
+
+export type CampaignBanner = {
+  enabled: boolean;
+  mode: "bar" | "large";
+  headline: string;
+  subtext?: string;
+  imageUrl?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  ctaLabel?: string;
+  ctaUrl?: string;
+  theme: "spark" | "indigo" | "paper";
+  dismissible: boolean;
+  startDate?: string;
+  endDate?: string;
+  /* changes on every publish — used to re-show after edits despite dismissal */
+  stamp: string;
+};
+
+export async function getCampaignBanner(): Promise<CampaignBanner | null> {
+  return cmsFetch<CampaignBanner | null>(
+    groq`*[_type == "campaignBanner"][0]{
+      enabled, mode, headline, subtext,
+      "imageUrl": image.asset->url,
+      "imageWidth": image.asset->metadata.dimensions.width,
+      "imageHeight": image.asset->metadata.dimensions.height,
+      ctaLabel, ctaUrl, theme, dismissible, startDate, endDate,
+      "stamp": _updatedAt
+    }`,
+    null
+  );
+}
+
 /* ---- stories (S5) ---- */
 
 export type Story = {
