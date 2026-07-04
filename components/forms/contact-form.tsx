@@ -2,20 +2,43 @@
 
 import { useState } from "react";
 import { Button } from "@/components/buttons";
-import { site } from "@/lib/site";
 
 /*
- * Contact form (spec §7 /contact): name · email · message.
- * TODO(stage 5): POST to /api/contact (insert + Resend notification).
- * Until then the submit points people to the direct email — honestly.
+ * Contact form (spec §7 /contact) → POST /api/contact.
  */
 export function ContactForm() {
-  const [note, setNote] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setNote(
-      `This form goes live in a few days — meanwhile, write to ${site.contactEmail} and a real human will reply.`
+    if (status === "sending") return;
+    setStatus("sending");
+
+    const form = new FormData(e.currentTarget);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.get("name"),
+          email: form.get("email"),
+          message: form.get("message"),
+          website: (form.get("website") as string) || "",
+        }),
+      });
+      setStatus(res.ok ? "success" : "error");
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  if (status === "success") {
+    return (
+      <p role="status" className="max-w-md text-lg leading-relaxed">
+        <span className="font-display text-2xl font-bold">Got it.</span>
+        <br />
+        Your message is with us — a real human will reply soon.
+      </p>
     );
   }
 
@@ -60,7 +83,7 @@ export function ContactForm() {
         />
       </div>
 
-      {/* honeypot (used in stage 5) */}
+      {/* honeypot */}
       <input
         type="text"
         name="website"
@@ -70,12 +93,12 @@ export function ContactForm() {
         className="hidden"
       />
 
-      <Button type="submit" className="self-start">
-        Send it
+      <Button type="submit" className="self-start" disabled={status === "sending"}>
+        {status === "sending" ? "Sending…" : "Send it"}
       </Button>
-      {note && (
-        <p role="status" className="text-sm font-semibold text-clay">
-          {note}
+      {status === "error" && (
+        <p role="alert" className="text-sm font-semibold text-clay">
+          Something wobbled. Try once more?
         </p>
       )}
     </form>

@@ -3,16 +3,13 @@
 import { useState } from "react";
 import { Button } from "@/components/buttons";
 import { CitySelect } from "@/components/city-select";
-import { site } from "@/lib/site";
+import { LogoMark } from "@/components/logo";
 
 /*
- * Waitlist form (spec §6-S8 Tier 1). Fields: email (required), phone
- * (optional), city (curated dropdown), consent (required).
- *
- * TODO(stage 5): POST to /api/waitlist (zod-validated, honeypot,
- * rate-limited, Resend confirmation) and morph into the footprint-S
- * success state with doodle-spark confetti. Until that route exists the
- * submit shows an honest "opening soon" note instead of failing silently.
+ * Waitlist form (spec §6-S8 Tier 1) → POST /api/waitlist.
+ * Success: the form morphs into the footprint-S with a welcome line and
+ * a little confetti of doodle sparks. Duplicate signups look identical
+ * to new ones (the API never reveals who is already subscribed).
  */
 export function WaitlistForm({
   source = "hero",
@@ -23,16 +20,75 @@ export function WaitlistForm({
   source?: "hero" | "club" | "shop" | "closing";
   emailOnly?: boolean;
   buttonLabel?: string;
-  cities?: readonly string[]; // CMS-driven; defaults to lib/site list
+  cities?: readonly string[];
 }) {
-  const [, setCity] = useState("");
-  const [note, setNote] = useState("");
+  const [city, setCity] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [errorNote, setErrorNote] = useState("");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    // Stage 5 wires this to /api/waitlist with { email, phone, city, source }.
-    setNote(
-      "Almost there — the waitlist opens here in a few days. Until then, find us on Instagram."
+    if (status === "sending") return;
+    setStatus("sending");
+    setErrorNote("");
+
+    const form = new FormData(e.currentTarget);
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: form.get("email"),
+          phone: (form.get("phone") as string) || "",
+          city,
+          source,
+          consent: true,
+          website: (form.get("website") as string) || "",
+        }),
+      });
+      if (res.ok) {
+        setStatus("success");
+      } else {
+        setStatus("error");
+        setErrorNote(
+          res.status === 429
+            ? "Whoa — a few too many tries at once. Give it a minute?"
+            : "Something wobbled. Try once more?"
+        );
+      }
+    } catch {
+      setStatus("error");
+      setErrorNote("Something wobbled. Try once more?");
+    }
+  }
+
+  if (status === "success") {
+    return (
+      <div
+        role="status"
+        className="relative flex w-full max-w-md flex-col items-center gap-4 py-6 text-center"
+      >
+        {/* confetti of doodle sparks */}
+        <span aria-hidden className="confetti">
+          {[...Array(6)].map((_, i) => (
+            <svg
+              key={i}
+              viewBox="0 0 32 32"
+              className="confetti-spark text-spark"
+              style={{ "--ci": i } as React.CSSProperties}
+            >
+              <path
+                fill="currentColor"
+                d="M16 3 C17 10 19 14 27 16 C19 18 17 22 16 29 C15 22 13 18 5 16 C13 14 15 10 16 3 Z"
+              />
+            </svg>
+          ))}
+        </span>
+        <LogoMark className="h-24 w-auto" title="Sapiens footprint logo" />
+        <p className="font-display text-2xl font-bold">
+          Welcome, Sapiens. We&apos;ll see you at the beginning.
+        </p>
+      </div>
     );
   }
 
@@ -82,7 +138,7 @@ export function WaitlistForm({
         </>
       )}
 
-      {/* honeypot — bots fill it, humans never see it (used in stage 5) */}
+      {/* honeypot — bots fill it, humans never see it */}
       <input
         type="text"
         name="website"
@@ -92,21 +148,13 @@ export function WaitlistForm({
         className="hidden"
       />
 
-      <Button type="submit" className="self-start">
-        {buttonLabel}
+      <Button type="submit" className="self-start" disabled={status === "sending"}>
+        {status === "sending" ? "One moment…" : buttonLabel}
       </Button>
 
-      {note ? (
-        <p role="status" className="text-sm font-semibold text-clay">
-          {note}{" "}
-          <a
-            href={site.instagramUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline decoration-spark decoration-2 underline-offset-2"
-          >
-            @sapiens.club_
-          </a>
+      {status === "error" ? (
+        <p role="alert" className="text-sm font-semibold text-clay">
+          {errorNote}
         </p>
       ) : (
         !emailOnly && (
