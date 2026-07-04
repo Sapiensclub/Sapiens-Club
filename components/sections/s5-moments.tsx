@@ -30,7 +30,7 @@ const STORIES = [
 
 export function S5Moments() {
   return (
-    <section className="bg-gradient-to-b from-paper via-[#EFE6E4] to-[#4A3F63] py-28">
+    <section className="s5-moments bg-gradient-to-b from-paper via-[#EFE6E4] to-[#4A3F63] py-28">
       <div className="mx-auto max-w-6xl px-6 text-center">
         <h2>Stories from the world we&apos;re building</h2>
         <p className="mt-4 text-lg">

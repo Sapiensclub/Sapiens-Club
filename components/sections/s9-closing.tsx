@@ -8,7 +8,7 @@ import { SunriseDoodle } from "@/components/doodles/extras";
 export function S9Closing() {
   return (
     <section className="bg-dawn px-6 pt-10 pb-28 text-center">
-      <Doodle className="mx-auto w-56 text-ink">
+      <Doodle className="mx-auto block w-56 text-ink">
         <SunriseDoodle title="The sun rising over the horizon" />
       </Doodle>
       <h2 className="mx-auto mt-8 max-w-2xl">

@@ -26,6 +26,27 @@
   --font-body: var(--font-nunito-sans); /* everything readable */
 }
 
+/*
+ * NIGHT MODE (owner request) — flipping these four variables re-themes the
+ * entire site, because every colour utility resolves through them. Spark,
+ * gold, moonlight and night itself stay constant so accents keep working.
+ * Applied via data-mode="night" on <html> (see theme-toggle.tsx).
+ */
+html[data-mode="night"] {
+  --color-paper: #17142e; /* backgrounds become celestial night */
+  --color-ink: #e9ecff; /* text and doodles become moonlit */
+  --color-dawn: #1d1839; /* dawn sections become a deeper indigo */
+  --color-clay: #e8825d; /* brightened for contrast on dark */
+}
+
+/* the two dusk-gradient sections need their own night backgrounds */
+html[data-mode="night"] .s5-moments {
+  background-image: linear-gradient(to bottom, #17142e, #241e45, #100d22);
+}
+html[data-mode="night"] .s7-movement {
+  background-image: linear-gradient(to bottom, #241e45, #17142e, #1d1839);
+}
+
 /* The homepage animates this background paper -> night -> dawn on scroll (spec §8.6). */
 body {
   background-color: var(--color-paper);
@@ -61,7 +82,7 @@ h2 {
   top: 0;
   z-index: 100;
   background: var(--color-spark);
-  color: var(--color-ink);
+  color: var(--color-night); /* stays dark in both themes */
   padding: 0.5rem 1rem;
   font-weight: 700;
 }

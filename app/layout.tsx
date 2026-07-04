@@ -35,7 +35,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${cabinSketch.variable} ${nunitoSans.variable}`}>
+    <html
+      lang="en"
+      className={`${cabinSketch.variable} ${nunitoSans.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        {/* apply saved night mode before first paint — prevents a light flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(localStorage.getItem('sapiens-theme')==='night')document.documentElement.setAttribute('data-mode','night')}catch(e){}",
+          }}
+        />
+      </head>
       <body className="antialiased">
         <a href="#content" className="skip-link">
           Skip to content

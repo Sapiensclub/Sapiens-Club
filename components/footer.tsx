@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { site } from "@/lib/site";
 import { LogoMark } from "./logo";
+import { ThemeToggle } from "./theme-toggle";
 import {
   DiyaDoodle,
   IconInstagram,
@@ -77,6 +78,11 @@ export function Footer() {
           >
             <IconX className="h-6 w-6" />
           </a>
+        </div>
+
+        {/* night-mode toggle */}
+        <div className="flex justify-center">
+          <ThemeToggle />
         </div>
 
         {/* Row 4: small print */}

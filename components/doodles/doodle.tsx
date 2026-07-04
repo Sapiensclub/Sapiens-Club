@@ -42,10 +42,15 @@ export function Doodle({
   }, []);
 
   const state = drawn ? "doodle-drawn" : armed ? "doodle-pending" : "";
+  /*
+   * NOTE: no display class here on purpose — callers control display
+   * (e.g. `hidden md:block`). A hardcoded `inline-block` used to override
+   * responsive `hidden`, which flooded the mobile hero with doodles.
+   */
   return (
     <span
       ref={ref}
-      className={`doodle inline-block ${state} ${className}`}
+      className={`doodle ${state} ${className}`}
       style={
         delay
           ? ({ "--dd-delay": `${delay}ms` } as React.CSSProperties)

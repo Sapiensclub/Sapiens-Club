@@ -6,12 +6,13 @@ import { ButtonLink } from "@/components/buttons";
  */
 export function S7Movement() {
   return (
-    <section className="bg-gradient-to-b from-[#4A3F63] via-[#C9A98E] to-dawn py-28">
+    <section className="s7-movement bg-gradient-to-b from-[#4A3F63] via-[#C9A98E] to-dawn py-28">
       <div className="mx-auto max-w-3xl px-6 text-center">
-        <h2 className="text-paper [text-shadow:0_1px_12px_rgba(23,20,46,0.35)]">
+        {/* hardcoded light — this text sits on a dusk gradient in both themes */}
+        <h2 className="text-[#F7F4EC] [text-shadow:0_1px_12px_rgba(23,20,46,0.35)]">
           This is bigger than an app.
         </h2>
-        <p className="mt-8 text-lg leading-relaxed text-paper [text-shadow:0_1px_10px_rgba(23,20,46,0.45)]">
+        <p className="mt-8 text-lg leading-relaxed text-[#F7F4EC] [text-shadow:0_1px_10px_rgba(23,20,46,0.45)]">
           Every month, each city will name its most generous Sapiens. The best
           of them become City Saviours — people whose full-time work is
           helping, supported by the community. When two Sapiens both give five

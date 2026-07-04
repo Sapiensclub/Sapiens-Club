@@ -36,13 +36,14 @@ const LADDER = [
 
 export function S6Celestial() {
   return (
-    <section data-theme="night" className="bg-night py-28 text-paper">
+    // hardcoded light text — this section is night-coloured in both themes
+    <section data-theme="night" className="bg-night py-28 text-[#F7F4EC]">
       <div className="mx-auto max-w-5xl px-6 text-center">
         <p className="font-display text-2xl font-bold text-moonlight md:text-3xl">
           On Sapiens, you don&apos;t collect followers. You collect light.
         </p>
 
-        <Doodle className="mx-auto mt-14 w-32 text-moonlight">
+        <Doodle className="mx-auto mt-14 block w-32 text-moonlight">
           <MoonDoodle title="A crescent moon with two stars" />
         </Doodle>
         <p className="mt-4 text-sm tracking-wide text-moonlight/80">

@@ -69,6 +69,17 @@ export function S1Hero() {
           <p className="text-sm font-semibold tracking-wide">
             Launching in India, 2026. No app needed yet — just belief.
           </p>
+
+          {/* mobile: the two vignettes live in the flow, never over text
+              (spec §6-S1: vignettes reduce to 2 on mobile) */}
+          <div className="flex w-full items-end justify-center gap-12 pt-6 md:hidden">
+            <Doodle className="block w-28 text-ink">
+              <UmbrellaShare title="Two people sharing an umbrella in the rain" />
+            </Doodle>
+            <Doodle className="block w-28 text-ink" delay={400}>
+              <HighFive title="Two people high-fiving" />
+            </Doodle>
+          </div>
         </div>
 
         {/* the living doodle world around the edges */}
@@ -98,7 +109,7 @@ export function S1Hero() {
         <a
           href="#ache"
           aria-label="Scroll to the next section"
-          className="absolute bottom-4 left-1/2 -translate-x-1/2 rotate-90"
+          className="absolute bottom-4 left-1/2 hidden -translate-x-1/2 rotate-90 md:block"
         >
           <ArrowCurved className="w-10 text-ink/70" />
         </a>

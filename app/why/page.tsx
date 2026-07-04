@@ -68,7 +68,7 @@ export default function WhyPage() {
         made it yet.
       </p>
 
-      <Doodle className="my-8 w-16 text-ink">
+      <Doodle className="my-8 block w-16 text-ink">
         <HeartDoodle title="A hand-drawn heart" />
       </Doodle>
 

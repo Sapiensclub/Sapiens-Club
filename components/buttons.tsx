@@ -11,8 +11,9 @@ import Link from "next/link";
  */
 export type ButtonVariant = "primary" | "secondary" | "gold" | "moonlight";
 
+/* text-night (not text-ink) on filled buttons: stays dark in night mode */
 const VARIANT: Record<ButtonVariant, string> = {
-  primary: "bg-spark text-ink",
+  primary: "bg-spark text-night",
   secondary: "border-2 border-ink text-ink",
   gold: "bg-gold text-night",
   moonlight: "border-2 border-moonlight text-moonlight",

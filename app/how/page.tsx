@@ -85,7 +85,7 @@ export default function HowPage() {
             <div className="flex shrink-0 items-start gap-4 sm:flex-col sm:items-center">
               <span
                 aria-hidden
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-spark font-display text-xl font-bold text-ink"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-spark font-display text-xl font-bold text-night"
               >
                 {idx + 1}
               </span>

@@ -68,7 +68,8 @@ export function Header() {
   /* close the menu on navigation */
   useEffect(() => setOpen(false), [pathname]);
 
-  const tone = night ? "text-paper" : "text-ink";
+  /* moonlight (constant token) so the inverted header works in night mode too */
+  const tone = night ? "text-moonlight" : "text-ink";
   const bg = night
     ? "bg-night/90 backdrop-blur-md shadow-sm"
     : scrolled

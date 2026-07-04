@@ -24,7 +24,7 @@ export function S2Ache() {
           </p>
         ))}
       </div>
-      <Doodle className="mx-auto mt-16 w-48 text-ink">
+      <Doodle className="mx-auto mt-16 block w-48 text-ink">
         <PeopleBackToBack title="Two people back to back, each looking at a phone" />
       </Doodle>
     </section>
