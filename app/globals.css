@@ -15,7 +15,13 @@
   --color-gold: #f0c078; /* sun stage, Goodness Meter fill, milestone dots */
   --color-clay: #d85a30; /* rare warm secondary (badges only) */
   --color-dawn: #fbf3e4; /* dawn paper — S8/S9 + footer background */
+}
 
+/*
+ * Font tokens reference variables set by next/font on <html>, so they must
+ * be declared `inline` (Tailwind v4 rule for var-referencing tokens).
+ */
+@theme inline {
   --font-display: var(--font-cabin-sketch); /* headlines only, never below 28px */
   --font-body: var(--font-nunito-sans); /* everything readable */
 }
@@ -46,4 +52,308 @@ h2 {
 :focus-visible {
   outline: 2px solid var(--color-spark);
   outline-offset: 3px;
+}
+
+/* Skip-to-content link: invisible until focused with the keyboard */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  background: var(--color-spark);
+  color: var(--color-ink);
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+}
+.skip-link:focus {
+  left: 0.5rem;
+  top: 0.5rem;
+}
+
+/* ---------------------------------------------------------------------
+ * SKETCH BORDER — the hand-drawn button trick (spec §2.4): asymmetric
+ * radii make a rectangle look drawn by hand.
+ * ------------------------------------------------------------------- */
+.sketch-border {
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+
+/* sparkle that pops at a button's corner on hover */
+.btn-sparkle {
+  position: absolute;
+  top: -0.6rem;
+  right: -0.4rem;
+  opacity: 0;
+  transform: scale(0.4) rotate(-20deg);
+  transition:
+    opacity 150ms ease-out,
+    transform 200ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.group:hover .btn-sparkle {
+  opacity: 1;
+  transform: scale(1) rotate(12deg);
+}
+
+/* ---------------------------------------------------------------------
+ * DOODLE LINE-DRAW (spec §2.3). Elements with class "dd" (+ pathLength=1)
+ * draw themselves when their <Doodle> wrapper enters the viewport.
+ * "ddf" fill accents pop in right after. Stagger inside one doodle via
+ * the --i custom property. Without JS nothing is hidden.
+ * ------------------------------------------------------------------- */
+.doodle-pending .dd {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.doodle-pending .ddf {
+  opacity: 0;
+}
+.doodle-drawn .dd {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: dd-draw 750ms ease-out forwards;
+  animation-delay: calc(var(--dd-delay, 0ms) + var(--i, 0) * 110ms);
+}
+.doodle-drawn .ddf {
+  opacity: 0;
+  animation: dd-pop 350ms cubic-bezier(0.3, 1.6, 0.5, 1) forwards;
+  animation-delay: calc(var(--dd-delay, 0ms) + 700ms);
+}
+@keyframes dd-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes dd-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ---------------------------------------------------------------------
+ * LOGO — header toe-bounce on hover (spec §3): the five toes do a quick
+ * sequential bounce, like walking.
+ * ------------------------------------------------------------------- */
+.toe {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.group:hover .toe {
+  animation: toe-bounce 480ms ease-in-out;
+  animation-delay: calc(var(--toe, 0) * 70ms);
+}
+@keyframes toe-bounce {
+  35% {
+    transform: translateY(-7px);
+  }
+  70% {
+    transform: translateY(1.5px);
+  }
+}
+
+/* ---------------------------------------------------------------------
+ * LOGO INTRO (spec §3) — the ~2.5s staged hero animation.
+ * Stage 1 (0–0.8s):   heads walk in from the left, body strokes beneath.
+ * Stage 2 (0.8–1.6s): heads settle into toes; the sole draws itself.
+ * Stage 3 (1.6–2.5s): fill sweeps in, sparkle pops, gentle settle.
+ * ------------------------------------------------------------------- */
+.logo-intro {
+  color: var(--color-ink);
+  transform: scale(1.04);
+  animation: li-settle 400ms ease-out 2.15s forwards;
+}
+
+.li-head {
+  fill: currentColor;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation:
+    li-head-walk 1.5s cubic-bezier(0.45, 0, 0.3, 1) both,
+    li-head-fade 350ms ease-out forwards;
+  animation-delay: calc(var(--i) * 70ms), calc(1.55s + var(--i) * 60ms);
+}
+@keyframes li-head-walk {
+  0% {
+    opacity: 0;
+    transform: translate(-185px, 205px);
+  }
+  15% {
+    opacity: 1;
+  }
+  55% {
+    opacity: 1;
+    transform: translate(-45px, 185px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+@keyframes li-head-fade {
+  to {
+    opacity: 0;
+  }
+}
+
+.li-stroke {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation:
+    li-draw 700ms ease-out both,
+    li-fade-out 400ms ease-out 1.25s forwards;
+  animation-delay: calc(100ms + var(--i) * 120ms), 1.25s;
+}
+@keyframes li-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+.li-sole {
+  fill: currentColor;
+  fill-opacity: 0;
+  stroke: currentColor;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation:
+    li-draw 850ms ease-in-out both,
+    li-fill 500ms ease-out forwards;
+  animation-delay: calc(850ms + var(--i) * 140ms), 1.7s;
+}
+@keyframes li-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes li-fill {
+  to {
+    fill-opacity: 1;
+  }
+}
+
+.li-toe {
+  fill: currentColor;
+  opacity: 0;
+  animation: li-fade-in 400ms ease-out forwards;
+  animation-delay: calc(1.5s + var(--i) * 60ms);
+}
+@keyframes li-fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+.li-spark {
+  fill: var(--color-spark);
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: li-pop 450ms cubic-bezier(0.3, 1.6, 0.5, 1) 2.05s forwards;
+}
+@keyframes li-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.3) rotate(-30deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+@keyframes li-settle {
+  to {
+    transform: scale(1);
+  }
+}
+
+/* ---------------------------------------------------------------------
+ * DIYA FLICKER (footer) — two flame frames swap; reduced motion holds
+ * frame A.
+ * ------------------------------------------------------------------- */
+.diya-flame-a {
+  animation: diya-a 1.4s steps(1) infinite;
+}
+.diya-flame-b {
+  opacity: 0;
+  animation: diya-b 1.4s steps(1) infinite;
+}
+@keyframes diya-a {
+  0%,
+  55% {
+    opacity: 1;
+  }
+  56%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes diya-b {
+  0%,
+  55% {
+    opacity: 0;
+  }
+  56%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------
+ * MOBILE MENU — nav words slide in, staggered (delay set inline).
+ * ------------------------------------------------------------------- */
+.menu-item {
+  opacity: 0;
+  transform: translateX(-24px);
+  animation: menu-in 350ms ease-out forwards;
+}
+@keyframes menu-in {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ---------------------------------------------------------------------
+ * REDUCED MOTION — render everything in its final state (spec §2.3/§13).
+ * JS gates most animations already; this is the safety net.
+ * ------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .doodle-pending .dd,
+  .doodle-drawn .dd {
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+  .doodle-pending .ddf,
+  .doodle-drawn .ddf {
+    opacity: 1;
+    animation: none;
+  }
+  .toe,
+  .btn-sparkle,
+  .menu-item {
+    animation: none !important;
+  }
+  .menu-item {
+    opacity: 1;
+    transform: none;
+  }
+  .diya-flame-a {
+    animation: none;
+    opacity: 1;
+  }
+  .diya-flame-b {
+    animation: none;
+    opacity: 0;
+  }
 }

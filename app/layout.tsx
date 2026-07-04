@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Cabin_Sketch, Nunito_Sans } from "next/font/google";
+import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 import "./globals.css";
 
 /*
@@ -33,9 +35,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${cabinSketch.variable} ${nunitoSans.variable} antialiased`}>
-        {children}
+    <html lang="en" className={`${cabinSketch.variable} ${nunitoSans.variable}`}>
+      <body className="antialiased">
+        <a href="#content" className="skip-link">
+          Skip to content
+        </a>
+        <Header />
+        <main id="content">{children}</main>
+        <Footer />
       </body>
     </html>
   );
