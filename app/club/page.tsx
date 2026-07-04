@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ButtonLink } from "@/components/buttons";
 import { WaitlistForm } from "@/components/forms/waitlist-form";
-import { site } from "@/lib/site";
+import { getSiteSettings } from "@/sanity/content";
 
 export const metadata: Metadata = {
   title: "The Sapiens Club — the first thousand",
@@ -36,7 +36,8 @@ const FOUNDING_PERKS = [
   },
 ];
 
-export default function ClubPage() {
+export default async function ClubPage() {
+  const site = await getSiteSettings();
   return (
     <div className="mx-auto max-w-5xl px-6 py-20">
       <h1 className="text-center">The first thousand.</h1>
@@ -53,7 +54,7 @@ export default function ClubPage() {
             us your city, and you&apos;ll know the day it opens there.
           </p>
         </div>
-        <WaitlistForm source="club" />
+        <WaitlistForm source="club" cities={site.cities} />
       </section>
 
       {/* Tier 2 — Founding Sapiens */}

@@ -7,6 +7,7 @@ import {
   ShieldDoodle,
 } from "@/components/doodles/basics";
 import { PeopleFacing, HighFive } from "@/components/doodles/vignettes";
+import { getHomeSection } from "@/sanity/content";
 
 /*
  * S4 · HOW IT WORKS (spec §6-S4). Five cards — horizontal scroll-snap on
@@ -48,11 +49,14 @@ const SAFETY = [
   "An SOS button connected to nearby Sapiens and local police",
 ];
 
-export function S4How() {
+export async function S4How() {
+  const hs = await getHomeSection("s4");
   return (
     <section className="py-28">
       <div className="mx-auto max-w-6xl px-6">
-        <h2 className="text-center">Five steps. Zero rupees.</h2>
+        <h2 className="text-center">
+          {hs?.heading ?? "Five steps. Zero rupees."}
+        </h2>
 
         <ol className="mt-14 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 max-md:flex-col max-md:overflow-visible md:[&>li]:min-w-[260px]">
           {STEPS.map(({ title, body, Art }, idx) => (

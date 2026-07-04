@@ -1,5 +1,6 @@
 import { Doodle } from "@/components/doodles/doodle";
 import { PeopleBackToBack } from "@/components/doodles/vignettes";
+import { getHomeSection } from "@/sanity/content";
 
 /*
  * S2 · THE ACHE (spec §6-S2) — quiet contrast; motion nearly stops.
@@ -13,10 +14,14 @@ const LINES = [
   "And when money decides who gets help, kindness becomes a luxury.",
 ];
 
-export function S2Ache() {
+export async function S2Ache() {
+  const hs = await getHomeSection("s2");
   return (
     <section id="ache" className="mx-auto max-w-3xl px-6 py-28 text-center">
-      <h2>We have never been more connected. And never more alone.</h2>
+      <h2>
+        {hs?.heading ??
+          "We have never been more connected. And never more alone."}
+      </h2>
       <div className="mt-14 space-y-10">
         {LINES.map((line) => (
           <p key={line} className="text-lg leading-relaxed md:text-xl">

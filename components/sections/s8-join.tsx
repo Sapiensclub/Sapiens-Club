@@ -1,6 +1,6 @@
 import { ButtonLink } from "@/components/buttons";
 import { WaitlistForm } from "@/components/forms/waitlist-form";
-import { site } from "@/lib/site";
+import { getSiteSettings, getHomeSection } from "@/sanity/content";
 
 /*
  * S8 · JOIN (spec §6-S8) — dawn paper, the two tiers side by side.
@@ -14,11 +14,15 @@ const FOUNDING_PERKS = [
   "first consideration for City Saviour roles",
 ];
 
-export function S8Join() {
+export async function S8Join() {
+  const [site, hs] = await Promise.all([
+    getSiteSettings(),
+    getHomeSection("s8"),
+  ]);
   return (
     <section id="join" className="bg-dawn py-28">
       <div className="mx-auto max-w-6xl px-6">
-        <h2 className="text-center">Be one of the first.</h2>
+        <h2 className="text-center">{hs?.heading ?? "Be one of the first."}</h2>
 
         <div className="mt-14 grid items-start gap-10 lg:grid-cols-2">
           {/* Tier 1 — join the movement */}
@@ -26,7 +30,7 @@ export function S8Join() {
             <h3 className="font-display text-2xl font-bold">
               Join the movement
             </h3>
-            <WaitlistForm source="hero" />
+            <WaitlistForm source="hero" cities={site.cities} />
           </div>
 
           {/* Tier 2 — Founding Sapiens */}

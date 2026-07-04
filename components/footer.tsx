@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { site } from "@/lib/site";
+import { getSiteSettings } from "@/sanity/content";
 import { LogoMark } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
 import {
@@ -24,7 +24,8 @@ const FOOT_NAV = [
   { label: "Contact", href: "/contact" },
 ];
 
-export function Footer() {
+export async function Footer() {
+  const site = await getSiteSettings();
   return (
     <footer className="relative bg-dawn text-ink">
       <div className="mx-auto max-w-6xl space-y-10 px-6 py-14">

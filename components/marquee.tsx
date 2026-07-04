@@ -4,7 +4,7 @@
  * Items come from lib/site.ts (CMS-editable in stage 4). The track is
  * rendered twice so the loop is seamless; the copy is aria-labelled once.
  */
-import { site } from "@/lib/site";
+import { getSiteSettings } from "@/sanity/content";
 
 function Sparkle() {
   return (
@@ -17,10 +17,10 @@ function Sparkle() {
   );
 }
 
-function Track() {
+function Track({ items }: { items: readonly string[] }) {
   return (
     <>
-      {site.marqueeItems.map((item) => (
+      {items.map((item) => (
         <span key={item} className="flex items-center gap-8">
           <span className="font-display text-lg font-bold whitespace-nowrap">
             {item}
@@ -32,17 +32,18 @@ function Track() {
   );
 }
 
-export function Marquee() {
+export async function Marquee() {
+  const { marqueeItems } = await getSiteSettings();
   return (
     <div
       className="marquee border-y-2 border-ink/15 py-3"
       role="marquee"
-      aria-label={site.marqueeItems.join(" · ")}
+      aria-label={marqueeItems.join(" · ")}
     >
       <div className="marquee-track flex items-center gap-8">
-        <Track />
+        <Track items={marqueeItems} />
         <span aria-hidden className="flex items-center gap-8">
-          <Track />
+          <Track items={marqueeItems} />
         </span>
       </div>
     </div>

@@ -10,8 +10,10 @@ import { site } from "@/lib/site";
  */
 export function CitySelect({
   onChange,
+  cities = site.cities,
 }: {
   onChange: (city: string) => void;
+  cities?: readonly string[];
 }) {
   const [choice, setChoice] = useState("");
   const isOther = choice === "Other";
@@ -32,7 +34,7 @@ export function CitySelect({
         className="sketch-border border-2 border-ink bg-paper px-4 py-2.5"
       >
         <option value="">Choose a city…</option>
-        {site.cities.map((c) => (
+        {cities.map((c) => (
           <option key={c} value={c}>
             {c}
           </option>

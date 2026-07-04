@@ -1,5 +1,6 @@
 import { Doodle } from "@/components/doodles/doodle";
 import { DoorA, DoorB } from "@/components/doodles/vignettes";
+import { getHomeSection } from "@/sanity/content";
 
 /*
  * S3 · THE IDEA (spec §6-S3) — two doors. Hover: the door cracks open with
@@ -20,10 +21,11 @@ const DOORS = [
   },
 ];
 
-export function S3Idea() {
+export async function S3Idea() {
+  const hs = await getHomeSection("s3");
   return (
     <section className="mx-auto max-w-4xl px-6 py-28 text-center">
-      <h2>The anti-social-network. Built for real life.</h2>
+      <h2>{hs?.heading ?? "The anti-social-network. Built for real life."}</h2>
       <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed">
         No profiles to scroll. No feeds to get lost in. No money changing
         hands. You open Sapiens for one of two reasons:

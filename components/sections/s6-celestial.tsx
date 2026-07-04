@@ -1,5 +1,10 @@
 import { Doodle } from "@/components/doodles/doodle";
 import { MoonDoodle } from "@/components/doodles/extras";
+import {
+  getJourneyStages,
+  getHomeSection,
+  type JourneyStage,
+} from "@/sanity/content";
 
 /*
  * S6 · THE CELESTIAL JOURNEY (spec §6-S6 + §8) — night, the signature.
@@ -26,42 +31,55 @@ const CARDS = [
   },
 ];
 
-const LADDER = [
-  { label: "Crescent", helps: "10 helps", caption: "Your light is growing" },
-  { label: "Half moon", helps: "50", caption: "Halfway to full" },
-  { label: "Full moon", helps: "100", caption: "You light the way for others" },
-  { label: "Sunrise", helps: "500", caption: "Your warmth starts to spread" },
-  { label: "Golden sun", helps: "1000", caption: "Your light joins the galaxy" },
+const FALLBACK_STAGES: JourneyStage[] = [
+  { threshold: 0, name: "New moon", caption: "Your journey begins" },
+  { threshold: 10, name: "Crescent", caption: "Your light is growing" },
+  { threshold: 50, name: "Half moon", caption: "Halfway to full" },
+  { threshold: 100, name: "Full moon", caption: "You light the way for others" },
+  { threshold: 500, name: "Sunrise", caption: "Your warmth starts to spread" },
+  { threshold: 1000, name: "Golden sun", caption: "Your light joins the galaxy." },
 ];
 
-export function S6Celestial() {
+export async function S6Celestial() {
+  const [stages, hs] = await Promise.all([
+    getJourneyStages(FALLBACK_STAGES),
+    getHomeSection("s6"),
+  ]);
+  const first = stages[0];
+  const ladder = stages.slice(1); // stage 0 (new moon) captions the moon itself
   return (
     // hardcoded light text — this section is night-coloured in both themes
     <section data-theme="night" className="bg-night py-28 text-[#F7F4EC]">
       <div className="mx-auto max-w-5xl px-6 text-center">
         <p className="font-display text-2xl font-bold text-moonlight md:text-3xl">
-          On Sapiens, you don&apos;t collect followers. You collect light.
+          {hs?.heading ??
+            "On Sapiens, you don't collect followers. You collect light."}
         </p>
 
         <Doodle className="mx-auto mt-14 block w-32 text-moonlight">
           <MoonDoodle title="A crescent moon with two stars" />
         </Doodle>
         <p className="mt-4 text-sm tracking-wide text-moonlight/80">
-          Your journey begins
+          {first?.caption ?? "Your journey begins"}
         </p>
 
         {/* milestone ladder — becomes the scroll-driven scrub in stage 7 */}
-        <ol className="mx-auto mt-12 grid max-w-3xl gap-4 text-left sm:grid-cols-5 sm:text-center">
-          {LADDER.map(({ label, helps, caption }) => (
-            <li key={label} className="flex flex-col gap-1">
+        <ol
+          className="mx-auto mt-12 grid max-w-3xl gap-4 text-left sm:[grid-template-columns:repeat(var(--n),minmax(0,1fr))] sm:text-center"
+          style={{ "--n": ladder.length } as React.CSSProperties}
+        >
+          {ladder.map(({ name, threshold, caption }) => (
+            <li key={name} className="flex flex-col gap-1">
               <span
                 aria-hidden
                 className="mx-0 h-2.5 w-2.5 rounded-full bg-gold sm:mx-auto"
               />
               <span className="font-display text-lg font-bold text-gold">
-                {label}
+                {name}
               </span>
-              <span className="text-xs text-moonlight/70">{helps}</span>
+              <span className="text-xs text-moonlight/70">
+                {threshold} helps
+              </span>
               <span className="text-xs text-moonlight/90">{caption}</span>
             </li>
           ))}

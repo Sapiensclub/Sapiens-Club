@@ -1,16 +1,18 @@
 import { ButtonLink } from "@/components/buttons";
+import { getHomeSection } from "@/sanity/content";
 
 /*
  * S7 · THE MOVEMENT (spec §6-S7) — dawn begins. Mentions City Saviours
  * only as a "later" thing, per the vocabulary rules.
  */
-export function S7Movement() {
+export async function S7Movement() {
+  const hs = await getHomeSection("s7");
   return (
     <section className="s7-movement bg-gradient-to-b from-[#4A3F63] via-[#C9A98E] to-dawn py-28">
       <div className="mx-auto max-w-3xl px-6 text-center">
         {/* hardcoded light — this text sits on a dusk gradient in both themes */}
         <h2 className="text-[#F7F4EC] [text-shadow:0_1px_12px_rgba(23,20,46,0.35)]">
-          This is bigger than an app.
+          {hs?.heading ?? "This is bigger than an app."}
         </h2>
         <p className="mt-8 text-lg leading-relaxed text-[#F7F4EC] [text-shadow:0_1px_10px_rgba(23,20,46,0.45)]">
           Every month, each city will name its most generous Sapiens. The best

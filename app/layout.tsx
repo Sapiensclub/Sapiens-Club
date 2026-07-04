@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Cabin_Sketch, Nunito_Sans } from "next/font/google";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { HideOnStudio } from "@/components/hide-on-studio";
+import { getSiteSettings } from "@/sanity/content";
 import "./globals.css";
 
 /*
@@ -29,11 +31,12 @@ export const metadata: Metadata = {
     "A society where helping each other is the default — not the exception. Real people helping real people nearby: no money, no profiles, no feeds. Launching in India, 2026.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { announcement } = await getSiteSettings();
   return (
     <html
       lang="en"
@@ -50,12 +53,21 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased">
-        <a href="#content" className="skip-link">
-          Skip to content
-        </a>
-        <Header />
+        <HideOnStudio>
+          <a href="#content" className="skip-link">
+            Skip to content
+          </a>
+          {announcement && (
+            <div className="bg-spark px-4 py-2 text-center text-sm font-bold text-night">
+              {announcement}
+            </div>
+          )}
+          <Header />
+        </HideOnStudio>
         <main id="content">{children}</main>
-        <Footer />
+        <HideOnStudio>
+          <Footer />
+        </HideOnStudio>
       </body>
     </html>
   );

@@ -18,10 +18,12 @@ export function WaitlistForm({
   source = "hero",
   emailOnly = false,
   buttonLabel = "Count me in",
+  cities,
 }: {
   source?: "hero" | "club" | "shop" | "closing";
   emailOnly?: boolean;
   buttonLabel?: string;
+  cities?: readonly string[]; // CMS-driven; defaults to lib/site list
 }) {
   const [, setCity] = useState("");
   const [note, setNote] = useState("");
@@ -71,7 +73,7 @@ export function WaitlistForm({
             />
           </div>
 
-          <CitySelect onChange={setCity} />
+          <CitySelect onChange={setCity} cities={cities} />
 
           <label className="flex items-start gap-3 text-sm">
             <input type="checkbox" required className="mt-1 h-4 w-4 accent-spark" />

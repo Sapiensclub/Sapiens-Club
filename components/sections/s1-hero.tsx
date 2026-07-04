@@ -14,7 +14,7 @@ import {
   TiffinPass,
   HighFive,
 } from "@/components/doodles/vignettes";
-import { site } from "@/lib/site";
+import { getSiteSettings } from "@/sanity/content";
 
 /*
  * S1 · HERO — "The Living Doodle World" (spec §6-S1).
@@ -22,7 +22,8 @@ import { site } from "@/lib/site";
  * Stage 6 adds: vignette loops (rain, steam, bobbing), the flying paper
  * plane, cloud drift, mouse parallax, per-word headline stroke-draw.
  */
-export function S1Hero() {
+export async function S1Hero() {
+  const site = await getSiteSettings();
   return (
     <section className="relative flex min-h-[calc(100vh-64px)] flex-col overflow-hidden">
       <div className="relative mx-auto flex w-full max-w-6xl flex-1 items-center px-6 py-14">
