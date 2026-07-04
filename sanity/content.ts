@@ -166,6 +166,20 @@ export async function getJourneyStages(
   return rows.length ? rows : fallback;
 }
 
+/* ---- milestones (celebration thresholds, HUD dots in S6) ---- */
+
+export type Milestone = { helps: number; label: string; caption: string };
+
+export async function getMilestones(
+  fallback: Milestone[]
+): Promise<Milestone[]> {
+  const rows = await cmsFetch<Milestone[]>(
+    groq`*[_type == "milestone"] | order(helps asc){ helps, label, caption }`,
+    []
+  );
+  return rows.length ? rows : fallback;
+}
+
 /* ---- shop tease items ---- */
 
 export type ShopItem = { name: string; doodleKey: string; stampText: string };
