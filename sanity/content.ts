@@ -12,10 +12,14 @@ import { site } from "@/lib/site";
  */
 const FETCH_OPTS = { next: { tags: ["content"], revalidate: 3600 } };
 
-async function cmsFetch<T>(query: string, fallback: T): Promise<T> {
+async function cmsFetch<T>(
+  query: string,
+  fallback: T,
+  params: Record<string, unknown> = {}
+): Promise<T> {
   if (!projectId) return fallback;
   try {
-    const data = await client.fetch<T>(query, {}, FETCH_OPTS);
+    const data = await client.fetch<T>(query, params, FETCH_OPTS);
     return data ?? fallback;
   } catch (err) {
     console.error("[cms] fetch failed, using fallback copy:", err);
@@ -190,6 +194,87 @@ export async function getShopItems(fallback: ShopItem[]): Promise<ShopItem[]> {
     []
   );
   return rows.length ? rows : fallback;
+}
+
+/* ---- inner pages (Level-2 CMS) ---- */
+
+// Portable Text is an array of blocks; keep it loose to avoid a hard dep
+// on @portabletext types in this server module.
+export type PortableBlocks = unknown[];
+
+export type ProsePage = { title?: string; content?: PortableBlocks };
+
+export async function getProsePage(
+  slug: "why" | "privacy" | "terms"
+): Promise<ProsePage | null> {
+  return cmsFetch<ProsePage | null>(
+    groq`*[_type == "prosePage" && slug == $slug][0]{ title, content }`,
+    null,
+    { slug }
+  );
+}
+
+export type PageWhat = {
+  heading?: string;
+  weDont?: string[];
+  weDo?: string[];
+  kindnessHeading?: string;
+  kindnessIntro?: string;
+  kindnessChips?: string[];
+  closing?: string;
+};
+export async function getPageWhat(): Promise<PageWhat | null> {
+  return cmsFetch<PageWhat | null>(
+    groq`*[_type == "pageWhat"][0]{ heading, weDont, weDo, kindnessHeading, kindnessIntro, kindnessChips, closing }`,
+    null
+  );
+}
+
+export type PageHowStep = { title: string; body: string; doodleKey: string };
+export type PageHowSafety = { title: string; body: string };
+export type PageHow = {
+  heading?: string;
+  steps?: PageHowStep[];
+  safetyHeading?: string;
+  safety?: PageHowSafety[];
+  safetyLine?: string;
+};
+export async function getPageHow(): Promise<PageHow | null> {
+  return cmsFetch<PageHow | null>(
+    groq`*[_type == "pageHow"][0]{ heading, steps, safetyHeading, safety, safetyLine }`,
+    null
+  );
+}
+
+export type PagePerk = { title: string; body: string };
+export type PageClub = {
+  heading?: string;
+  tagline?: string;
+  waitlistHeading?: string;
+  waitlistIntro?: string;
+  foundingHeading?: string;
+  foundingIntro?: string;
+  perks?: PagePerk[];
+  orgHeading?: string;
+  orgBody?: string;
+  orgPoints?: string[];
+};
+export async function getPageClub(): Promise<PageClub | null> {
+  return cmsFetch<PageClub | null>(
+    groq`*[_type == "pageClub"][0]{ heading, tagline, waitlistHeading, waitlistIntro, foundingHeading, foundingIntro, perks, orgHeading, orgBody, orgPoints }`,
+    null
+  );
+}
+
+export type PageIntro = { heading?: string; intro?: string };
+export async function getPageIntro(
+  slug: "contact" | "shop"
+): Promise<PageIntro | null> {
+  return cmsFetch<PageIntro | null>(
+    groq`*[_type == "pageIntro" && slug == $slug][0]{ heading, intro }`,
+    null,
+    { slug }
+  );
 }
 
 /* ---- home section heading overrides (s2..s9) ---- */

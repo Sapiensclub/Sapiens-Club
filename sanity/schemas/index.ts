@@ -292,45 +292,236 @@ export const journeyStage = defineType({
   ],
 });
 
-export const page = defineType({
-  name: "page",
-  title: "Page",
+/*
+ * INNER PAGES (Level-2 CMS, July 2026). Each page below is a singleton the
+ * owner edits in the studio. Every page in the app falls back to its
+ * built-in copy if its document is empty, so nothing can break.
+ *
+ * Prose pages (why, privacy, terms) use rich text (Portable Text) — a
+ * familiar Google-Docs-style editor. Structured pages (what, how, club)
+ * use clearly-labelled fields so the designed layout is preserved.
+ */
+
+/* reusable rich-text field: paragraphs, H2/H3, bold/italic/links, plus
+   pull-quotes and doodles as insertable blocks */
+const richText = {
+  name: "content",
+  title: "Content",
+  type: "array" as const,
+  of: [
+    {
+      type: "block" as const,
+      styles: [
+        { title: "Normal", value: "normal" },
+        { title: "Heading", value: "h2" },
+        { title: "Subheading", value: "h3" },
+      ],
+      marks: {
+        decorators: [
+          { title: "Bold", value: "strong" },
+          { title: "Italic", value: "em" },
+        ],
+        annotations: [
+          {
+            name: "link",
+            type: "object" as const,
+            title: "Link",
+            fields: [{ name: "href", type: "url", title: "URL" }],
+          },
+        ],
+      },
+    },
+    {
+      type: "object" as const,
+      name: "pullQuote",
+      title: "Pull quote",
+      fields: [defineField({ name: "text", type: "text", rows: 3 })],
+      preview: { select: { title: "text" } },
+    },
+    {
+      type: "object" as const,
+      name: "doodle",
+      title: "Doodle",
+      fields: [
+        defineField({
+          name: "doodleKey",
+          title: "Which doodle",
+          type: "string",
+          options: {
+            list: ["cloud", "sun", "heart", "shield", "sparkle", "plane"],
+          },
+        }),
+      ],
+      preview: { select: { title: "doodleKey" } },
+    },
+  ],
+};
+
+/* why / privacy / terms — prose pages */
+export const prosePage = defineType({
+  name: "prosePage",
+  title: "Prose page",
   type: "document",
   fields: [
     defineField({
       name: "slug",
+      title: "Which page",
       type: "string",
-      options: { list: ["why", "what", "how", "club-extras"] },
-      validation: (r) => r.required(),
+      options: {
+        list: [
+          { title: "Why (manifesto)", value: "why" },
+          { title: "Privacy", value: "privacy" },
+          { title: "Terms", value: "terms" },
+        ],
+      },
+      readOnly: true,
     }),
-    defineField({ name: "title", type: "string" }),
+    defineField({ name: "title", title: "Page title (H1)", type: "string" }),
+    defineField(richText),
+  ],
+  preview: { select: { title: "title", subtitle: "slug" } },
+});
+
+/* /what — the anti-social-network */
+export const pageWhat = defineType({
+  name: "pageWhat",
+  title: "Page: What",
+  type: "document",
+  fields: [
+    defineField({ name: "heading", title: "Heading (H1)", type: "string" }),
     defineField({
-      name: "content",
+      name: "weDont",
+      title: "“We don't” list",
+      type: "array",
+      of: [{ type: "string" }],
+    }),
+    defineField({
+      name: "weDo",
+      title: "“We do” list",
+      type: "array",
+      of: [{ type: "string" }],
+    }),
+    defineField({ name: "kindnessHeading", title: "Kindness section heading", type: "string" }),
+    defineField({ name: "kindnessIntro", title: "Kindness section intro", type: "text", rows: 3 }),
+    defineField({
+      name: "kindnessChips",
+      title: "Kindness chips",
+      type: "array",
+      of: [{ type: "string" }],
+    }),
+    defineField({ name: "closing", title: "Closing line", type: "text", rows: 3 }),
+  ],
+});
+
+/* /how — five steps + safety */
+export const pageHow = defineType({
+  name: "pageHow",
+  title: "Page: How",
+  type: "document",
+  fields: [
+    defineField({ name: "heading", title: "Heading (H1)", type: "string" }),
+    defineField({
+      name: "steps",
+      title: "Steps",
       type: "array",
       of: [
-        { type: "block" },
         {
           type: "object",
-          name: "pullQuote",
-          title: "Pull quote",
-          fields: [defineField({ name: "text", type: "text", rows: 3 })],
-        },
-        {
-          type: "object",
-          name: "doodle",
-          title: "Doodle",
           fields: [
+            defineField({ name: "title", type: "string" }),
+            defineField({ name: "body", type: "text", rows: 4 }),
             defineField({
               name: "doodleKey",
               type: "string",
-              options: { list: ["cloud", "sun", "heart", "shield", "sparkle", "plane"] },
+              options: {
+                list: ["plane", "sparkle", "facing", "highfive", "heart", "shield"],
+              },
             }),
           ],
+          preview: { select: { title: "title" } },
         },
       ],
     }),
+    defineField({ name: "safetyHeading", title: "Safety section heading", type: "string" }),
+    defineField({
+      name: "safety",
+      title: "Safety items",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({ name: "title", type: "string" }),
+            defineField({ name: "body", type: "text", rows: 3 }),
+          ],
+          preview: { select: { title: "title" } },
+        },
+      ],
+    }),
+    defineField({ name: "safetyLine", title: "Safety closing line", type: "string" }),
   ],
-  preview: { select: { title: "slug", subtitle: "title" } },
+});
+
+/* /club — waitlist + founding + organizations */
+export const pageClub = defineType({
+  name: "pageClub",
+  title: "Page: Club",
+  type: "document",
+  fields: [
+    defineField({ name: "heading", title: "Heading (H1)", type: "string" }),
+    defineField({ name: "tagline", title: "Tagline", type: "text", rows: 2 }),
+    defineField({ name: "waitlistHeading", title: "Waitlist heading", type: "string" }),
+    defineField({ name: "waitlistIntro", title: "Waitlist intro", type: "text", rows: 3 }),
+    defineField({ name: "foundingHeading", title: "Founding heading", type: "string" }),
+    defineField({ name: "foundingIntro", title: "Founding intro", type: "text", rows: 2 }),
+    defineField({
+      name: "perks",
+      title: "Founding perks",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({ name: "title", type: "string" }),
+            defineField({ name: "body", type: "text", rows: 3 }),
+          ],
+          preview: { select: { title: "title" } },
+        },
+      ],
+    }),
+    defineField({ name: "orgHeading", title: "Organizations heading", type: "string" }),
+    defineField({ name: "orgBody", title: "Organizations body", type: "text", rows: 4 }),
+    defineField({
+      name: "orgPoints",
+      title: "Organizations points",
+      type: "array",
+      of: [{ type: "string" }],
+    }),
+  ],
+});
+
+/* /contact and /shop — just the editable intro copy (forms/items already CMS) */
+export const pageIntro = defineType({
+  name: "pageIntro",
+  title: "Page intro",
+  type: "document",
+  fields: [
+    defineField({
+      name: "slug",
+      title: "Which page",
+      type: "string",
+      options: {
+        list: [
+          { title: "Contact", value: "contact" },
+          { title: "Shop", value: "shop" },
+        ],
+      },
+      readOnly: true,
+    }),
+    defineField({ name: "heading", title: "Heading (H1)", type: "string" }),
+    defineField({ name: "intro", title: "Intro text", type: "text", rows: 3 }),
+  ],
+  preview: { select: { title: "heading", subtitle: "slug" } },
 });
 
 export const shopTeaseItem = defineType({
@@ -362,6 +553,10 @@ export const schemaTypes = [
   faqItem,
   milestone,
   journeyStage,
-  page,
+  prosePage,
+  pageWhat,
+  pageHow,
+  pageClub,
+  pageIntro,
   shopTeaseItem,
 ];

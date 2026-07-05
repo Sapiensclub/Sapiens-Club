@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { site } from "@/lib/site";
+import { Prose } from "@/components/portable";
+import { getProsePage } from "@/sanity/content";
 
 export const metadata: Metadata = {
   title: "Terms — Sapiens",
@@ -9,10 +11,18 @@ export const metadata: Metadata = {
 
 /*
  * OWNER SHOULD HAVE THESE PROFESSIONALLY REVIEWED BEFORE SCALE.
- * Plain-English terms for the pre-launch website (not the future app —
- * the app will carry its own terms when it exists).
+ * Editable in the studio ("Pages → Terms"); built-in draft is the fallback.
  */
-export default function TermsPage() {
+export default async function TermsPage() {
+  const cms = await getProsePage("terms");
+  if (cms?.content?.length) {
+    return (
+      <article className="mx-auto max-w-[65ch] px-6 py-20 leading-relaxed">
+        <h1>{cms.title ?? "Terms"}</h1>
+        <Prose value={cms.content} />
+      </article>
+    );
+  }
   return (
     <article className="mx-auto max-w-[65ch] px-6 py-20 leading-relaxed">
       <h1>Terms</h1>

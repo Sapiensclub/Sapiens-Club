@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { site } from "@/lib/site";
+import { Prose } from "@/components/portable";
+import { getProsePage } from "@/sanity/content";
 
 export const metadata: Metadata = {
   title: "Privacy — Sapiens",
@@ -9,10 +11,19 @@ export const metadata: Metadata = {
 
 /*
  * OWNER SHOULD HAVE THESE PROFESSIONALLY REVIEWED BEFORE SCALE.
- * Plain-English privacy policy for an India-based pre-launch site
- * collecting email/phone/city with consent (DPDP Act-aware).
+ * Editable in the studio ("Pages → Privacy"); built-in DPDP-aware draft
+ * below is the fallback.
  */
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  const cms = await getProsePage("privacy");
+  if (cms?.content?.length) {
+    return (
+      <article className="mx-auto max-w-[65ch] px-6 py-20 leading-relaxed">
+        <h1>{cms.title ?? "Privacy"}</h1>
+        <Prose value={cms.content} />
+      </article>
+    );
+  }
   return (
     <article className="mx-auto max-w-[65ch] px-6 py-20 leading-relaxed">
       <h1>Privacy</h1>

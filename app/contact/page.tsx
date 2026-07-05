@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/forms/contact-form";
-import { getFaqs, getSiteSettings, type Faq } from "@/sanity/content";
+import { getFaqs, getSiteSettings, getPageIntro, type Faq } from "@/sanity/content";
 
 export const metadata: Metadata = {
   title: "Contact Sapiens",
@@ -57,13 +57,19 @@ const FALLBACK_FAQ: Faq[] = [
 ];
 
 export default async function ContactPage() {
-  const [site, faqs] = await Promise.all([
+  const [site, faqs, intro] = await Promise.all([
     getSiteSettings(),
     getFaqs(FALLBACK_FAQ),
+    getPageIntro("contact"),
   ]);
   return (
     <div className="mx-auto max-w-3xl px-6 py-20">
-      <h1 className="text-center">Say hello</h1>
+      <h1 className="text-center">{intro?.heading || "Say hello"}</h1>
+      {intro?.intro && (
+        <p className="mx-auto mt-4 max-w-xl text-center text-lg leading-relaxed">
+          {intro.intro}
+        </p>
+      )}
 
       <div className="mt-16 grid items-start gap-12 md:grid-cols-2">
         <ContactForm />

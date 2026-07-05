@@ -9,6 +9,7 @@ import {
   ShieldDoodle,
 } from "@/components/doodles/basics";
 import { PeopleFacing, HighFive } from "@/components/doodles/vignettes";
+import { getPageHow } from "@/sanity/content";
 
 export const metadata: Metadata = {
   title: "How Sapiens works — five steps, zero rupees",
@@ -17,36 +18,49 @@ export const metadata: Metadata = {
 };
 
 /*
- * /how — the five steps expanded, then Safety, in full (spec §7).
+ * /how — five steps + Safety (spec §7). Editable in the studio
+ * ("Pages → How"); constants below are the fallbacks. Step doodles map by
+ * key so CMS-added steps can pick an illustration.
  */
+const DOODLES: Record<string, React.ComponentType<{ className?: string }>> = {
+  plane: PaperPlane,
+  sparkle: SparkleA,
+  facing: PeopleFacing,
+  highfive: HighFive,
+  heart: HeartDoodle,
+  shield: ShieldDoodle,
+};
+
 const STEPS = [
   {
     title: "Ask.",
-    Art: PaperPlane,
+    doodleKey: "plane",
     body: "Raise a request — a ride, a meal, a game of badminton, a helping hand. It takes under a minute: what you need, roughly when, roughly where. No justifying, no bargaining, no price. Asking for help is the bravest button in the app, and we've made it the simplest.",
   },
   {
     title: "Nearby Sapiens are pinged.",
-    Art: SparkleA,
+    doodleKey: "sparkle",
     body: "Your request doesn't get broadcast to a feed — Sapiens has no feed. It quietly reaches only the people nearby who already said they like helping with exactly this kind of thing. If you offered rides, you hear about rides. No noise for anyone else, no performance for anyone at all.",
   },
   {
     title: "Someone shows up.",
-    Art: PeopleFacing,
+    doodleKey: "facing",
     body: "Before anyone arrives, you see who's coming — photo-verified, like your cab app, in both directions. They see who asked, you see who answered. Two real names, two real faces, one small plan. Most helps are done and dusted within the hour.",
   },
   {
     title: "Help happens. Moneta is earned.",
-    Art: HighFive,
+    doodleKey: "highfive",
     body: "The ride happens, the meal lands warm, the shelf gets carried up three floors. The helper earns one Moneta — our token of goodness. It's earned, never bought, and no money changes hands between people. Ever. Later, Moneta will be redeemable for good things; its real value is what it says about you.",
   },
   {
     title: "You choose to connect.",
-    Art: HeartDoodle,
+    doodleKey: "heart",
     body: "When the help ends, nothing is owed and nothing is automatic. If you both want to stay in touch, you both say so — and a real friendship begins, founded on a real act instead of a follow button. If not, you part as two people who made one day slightly better.",
   },
 ];
 
+const SAFETY_HEADING = "Safety, in full";
+const SAFETY_LINE = "Trust isn't a feature. It's the whole point.";
 const SAFETY = [
   {
     title: "Who can join",
@@ -74,31 +88,41 @@ const SAFETY = [
   },
 ];
 
-export default function HowPage() {
+export default async function HowPage() {
+  const cms = await getPageHow();
+  const heading = cms?.heading || "Five steps. Zero rupees.";
+  const steps = cms?.steps?.length ? cms.steps : STEPS;
+  const safetyHeading = cms?.safetyHeading || SAFETY_HEADING;
+  const safety = cms?.safety?.length ? cms.safety : SAFETY;
+  const safetyLine = cms?.safetyLine || SAFETY_LINE;
+
   return (
     <div className="mx-auto max-w-3xl px-6 py-20">
-      <h1 className="text-center">Five steps. Zero rupees.</h1>
+      <h1 className="text-center">{heading}</h1>
 
       <ol className="mt-16 space-y-14">
-        {STEPS.map(({ title, body, Art }, idx) => (
-          <li key={title} className="flex flex-col gap-4 sm:flex-row sm:gap-8">
-            <div className="flex shrink-0 items-start gap-4 sm:flex-col sm:items-center">
-              <span
-                aria-hidden
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-spark font-display text-xl font-bold text-night"
-              >
-                {idx + 1}
-              </span>
-              <Doodle className="h-14 w-16 text-ink">
-                <Art className="h-full w-full" />
-              </Doodle>
-            </div>
-            <div>
-              <h2 className="!text-2xl">{title}</h2>
-              <p className="mt-3 leading-relaxed">{body}</p>
-            </div>
-          </li>
-        ))}
+        {steps.map(({ title, body, doodleKey }, idx) => {
+          const Art = DOODLES[doodleKey] ?? PaperPlane;
+          return (
+            <li key={title} className="flex flex-col gap-4 sm:flex-row sm:gap-8">
+              <div className="flex shrink-0 items-start gap-4 sm:flex-col sm:items-center">
+                <span
+                  aria-hidden
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-spark font-display text-xl font-bold text-night"
+                >
+                  {idx + 1}
+                </span>
+                <Doodle className="h-14 w-16 text-ink">
+                  <Art className="h-full w-full" />
+                </Doodle>
+              </div>
+              <div>
+                <h2 className="!text-2xl">{title}</h2>
+                <p className="mt-3 leading-relaxed">{body}</p>
+              </div>
+            </li>
+          );
+        })}
       </ol>
 
       <section className="mt-24">
@@ -106,19 +130,17 @@ export default function HowPage() {
           <Doodle className="w-12 text-ink">
             <ShieldDoodle title="A hand-drawn shield" />
           </Doodle>
-          <h2>Safety, in full</h2>
+          <h2>{safetyHeading}</h2>
         </div>
         <div className="mt-10 space-y-10">
-          {SAFETY.map(({ title, body }) => (
+          {safety.map(({ title, body }) => (
             <div key={title}>
               <h3 className="text-xl font-bold">{title}</h3>
               <p className="mt-2 leading-relaxed">{body}</p>
             </div>
           ))}
         </div>
-        <p className="mt-12 font-display text-2xl font-bold">
-          Trust isn&apos;t a feature. It&apos;s the whole point.
-        </p>
+        <p className="mt-12 font-display text-2xl font-bold">{safetyLine}</p>
       </section>
 
       <section className="mt-20 text-center">

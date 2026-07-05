@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { ButtonLink } from "@/components/buttons";
 import { Doodle } from "@/components/doodles/doodle";
 import { CloudB, HeartDoodle, SunDoodle } from "@/components/doodles/basics";
+import { Prose } from "@/components/portable";
+import { getProsePage } from "@/sanity/content";
 
 export const metadata: Metadata = {
   title: "Why Sapiens exists",
@@ -10,8 +12,9 @@ export const metadata: Metadata = {
 };
 
 /*
- * /why — the manifesto (spec §7). Long-form essay, 65ch measure,
- * pull-quotes in Cabin Sketch, doodle margin art.
+ * /why — the manifesto (spec §7). Editable in the studio ("Pages → Why");
+ * if the CMS doc has content it renders that, otherwise the built-in essay
+ * below stays as the fallback so the page can never be blank.
  */
 function PullQuote({ children }: { children: React.ReactNode }) {
   return (
@@ -21,7 +24,23 @@ function PullQuote({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function WhyPage() {
+export default async function WhyPage() {
+  const cms = await getProsePage("why");
+  if (cms?.content?.length) {
+    return (
+      <article className="relative mx-auto max-w-[65ch] px-6 py-20 text-lg leading-relaxed">
+        <Doodle className="absolute -top-2 right-8 w-20 opacity-40">
+          <CloudB />
+        </Doodle>
+        <h1>{cms.title ?? "Why Sapiens exists"}</h1>
+        <Prose value={cms.content} />
+        <div className="mt-14">
+          <ButtonLink href="/club">Join the first thousand</ButtonLink>
+        </div>
+      </article>
+    );
+  }
+
   return (
     <article className="relative mx-auto max-w-[65ch] px-6 py-20 text-lg leading-relaxed">
       <Doodle className="absolute -top-2 right-8 w-20 opacity-40">

@@ -4,7 +4,7 @@ import { Doodle } from "@/components/doodles/doodle";
 import { ToteBag } from "@/components/doodles/basics";
 import { TeeDoodle, MugDoodle } from "@/components/doodles/extras";
 import { Reveal } from "@/components/reveal";
-import { getShopItems, type ShopItem } from "@/sanity/content";
+import { getShopItems, getPageIntro, type ShopItem } from "@/sanity/content";
 
 export const metadata: Metadata = {
   title: "The Sapiens Shop — not for sale, yet",
@@ -29,13 +29,16 @@ const DOODLES: Record<string, React.ComponentType<{ className?: string; title?: 
 };
 
 export default async function ShopPage() {
-  const products = await getShopItems(FALLBACK_PRODUCTS);
+  const [products, intro] = await Promise.all([
+    getShopItems(FALLBACK_PRODUCTS),
+    getPageIntro("shop"),
+  ]);
   return (
     <div className="mx-auto max-w-4xl px-6 py-20 text-center">
-      <h1>First we build the community. Then we wear it.</h1>
+      <h1>{intro?.heading || "First we build the community. Then we wear it."}</h1>
       <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed">
-        The Sapiens Shop opens after launch. Every rupee it makes flows
-        straight back into the community — always.
+        {intro?.intro ||
+          "The Sapiens Shop opens after launch. Every rupee it makes flows straight back into the community — always."}
       </p>
 
       <div className="mt-16 grid gap-10 sm:grid-cols-3">
