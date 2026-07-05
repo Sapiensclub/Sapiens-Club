@@ -105,7 +105,12 @@ export async function S1Hero() {
                 <ButtonLink href="#join">Join the movement</ButtonLink>
               </span>
               <span className="hero-cta" style={{ "--ci": 1 } as React.CSSProperties}>
-                <ButtonLink href={site.volunteerFormUrl} variant="secondary" newTab>
+                <ButtonLink
+                  href={site.volunteerFormUrl}
+                  variant="secondary"
+                  newTab
+                  data-analytics="volunteer_click"
+                >
                   Become a founding volunteer
                 </ButtonLink>
               </span>

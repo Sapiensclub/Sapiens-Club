@@ -55,7 +55,7 @@ export async function S8Join() {
             <ButtonLink
               href={site.volunteerFormUrl}
               newTab
-              title="Application link coming soon"
+              data-analytics="volunteer_click"
             >
               Apply to be a Founding Sapiens
             </ButtonLink>

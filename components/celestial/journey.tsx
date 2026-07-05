@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { JourneyStage, Milestone } from "@/sanity/content";
+import { capture } from "@/components/analytics";
 
 /*
  * THE CELESTIAL JOURNEY (spec §8) — the signature scroll piece.
@@ -143,6 +144,7 @@ export function CelestialJourney({
         lastStageIdx = idx;
         if (galaxyNow) {
           setInGalaxy(true);
+          capture("journey_completed");
           setCaption({
             name: "",
             text: "Individually we glow. Together, we are a galaxy.",

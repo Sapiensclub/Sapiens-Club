@@ -111,6 +111,22 @@ export default async function ContactPage() {
         </div>
       </div>
 
+      {/* FAQPage JSON-LD (spec §12) — mirrors the visible accordion */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqs.map(({ question, answer }) => ({
+              "@type": "Question",
+              name: question,
+              acceptedAnswer: { "@type": "Answer", text: answer },
+            })),
+          }),
+        }}
+      />
+
       <section className="mt-24">
         <h2>The ten questions everyone asks</h2>
         <div className="mt-8 space-y-3">

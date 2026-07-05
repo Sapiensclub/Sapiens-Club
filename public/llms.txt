@@ -1,0 +1,15 @@
+# Sapiens (sapiens.club)
+Sapiens is a pre-launch community platform — "the anti-social-network" — where real people help real people nearby: offline, for free, with no profiles to browse, no feeds, and no money changing hands. Launching city by city across India in 2026.
+Vision: a society where helping each other is the default — not the exception.
+How it works: someone raises a request (a ride, a meal, a skill, company); nearby members who chose to help with exactly that are quietly notified; someone photo-verified shows up; help happens; both sides may then choose to stay connected.
+Vocabulary:
+- Moneta: the token earned for each completed help. Earned, never bought; redeemable for good things after launch.
+- Goodness Meter: a 0–100 score reflecting someone's helping life — how often, how varied, how kind.
+- Celestial Journey: the moon-to-sun growth visual. Crescent at 10 helps, half moon at 50, full moon at 100, sunrise at 500, golden sun at 1000 — then your light joins the shared galaxy.
+- Founding Sapiens: the first 1000 volunteers, numbered #001–#1000.
+Safety: government-ID KYC before anyone helps or is helped, photo verification at meetups, two-way ratings, a group-only mode for under-18s, and an SOS button that alerts nearby members and local police.
+Business model: free forever for members; no ads, no data selling. A community shop (proceeds back to the community) comes after launch.
+Key pages: / (home), /what, /why (manifesto), /how (including safety in full), /club (waitlist + Founding Sapiens), /contact (FAQ), /shop.
+Waitlist: email + optional phone and city at sapiens.club/#join.
+Contact: sapiensclub1@gmail.com
+Social: instagram.com/sapiens.club_ · youtube.com/channel/UC3k3-4i8uhwbmzCQIZ3NBGA · x.com/Sapiens_Clubb

@@ -593,9 +593,10 @@ html.m .cloud-drift {
   }
 }
 
-/* mouse parallax layers (desktop only; JS sets --plx-x / --plx-y) */
+/* mouse parallax layers (desktop only; JS sets --plx-x / --plx-y).
+   NOTE: no display property here — it would override the responsive
+   hidden/md:block classes and flood the mobile hero (again). */
 html.m [data-plx] {
-  display: block;
   transition: transform 0.25s ease-out;
 }
 html.m [data-plx="1"] {

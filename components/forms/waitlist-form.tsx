@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/buttons";
 import { CitySelect } from "@/components/city-select";
 import { LogoMark } from "@/components/logo";
+import { capture } from "@/components/analytics";
 
 /*
  * Waitlist form (spec §6-S8 Tier 1) → POST /api/waitlist.
@@ -48,6 +49,7 @@ export function WaitlistForm({
       });
       if (res.ok) {
         setStatus("success");
+        capture("waitlist_signup", { city, source });
       } else {
         setStatus("error");
         setErrorNote(

@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { Cabin_Sketch, Nunito_Sans } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { HideOnStudio } from "@/components/hide-on-studio";
 import { CampaignBanner } from "@/components/campaign-banner";
+import { AnalyticsProvider } from "@/components/analytics";
 import { getSiteSettings } from "@/sanity/content";
+import { site } from "@/lib/site";
 import "./globals.css";
 
 /*
@@ -30,6 +33,7 @@ export const metadata: Metadata = {
   title: "Sapiens — the anti-social-network",
   description:
     "A society where helping each other is the default — not the exception. Real people helping real people nearby: no money, no profiles, no feeds. Launching in India, 2026.",
+  alternates: { canonical: "./" },
 };
 
 export default async function RootLayout({
@@ -74,6 +78,30 @@ export default async function RootLayout({
         <HideOnStudio>
           <Footer />
         </HideOnStudio>
+        <AnalyticsProvider />
+        <Analytics />
+        {/* JSON-LD: Organization + WebSite (spec §12) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                name: site.name,
+                url: site.url,
+                logo: `${site.url}/logo.svg`,
+                sameAs: [site.instagramUrl, site.youtubeUrl, site.twitterUrl],
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                name: site.name,
+                url: site.url,
+              },
+            ]),
+          }}
+        />
       </body>
     </html>
   );
