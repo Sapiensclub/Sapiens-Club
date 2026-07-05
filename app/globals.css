@@ -13,7 +13,9 @@
   --color-nightdeep: #0b0a18; /* celestial vignette edges */
   --color-moonlight: #cdd6ff; /* stars, moon glow, night-section secondary text */
   --color-gold: #f0c078; /* sun stage, Goodness Meter fill, milestone dots */
-  --color-clay: #d85a30; /* rare warm secondary (badges only) */
+  /* spec §2.1 says #D85A30, darkened to #BA4B25 so error text on paper
+     passes WCAG AA (4.64:1 vs 3.52:1) — QA stage 9 */
+  --color-clay: #ba4b25; /* rare warm secondary (badges, error text) */
   --color-dawn: #fbf3e4; /* dawn paper — S8/S9 + footer background */
 }
 
