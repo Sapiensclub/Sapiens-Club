@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cabin_Sketch, Nunito_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { HideOnStudio } from "@/components/hide-on-studio";
@@ -80,6 +81,12 @@ export default async function RootLayout({
         </HideOnStudio>
         <AnalyticsProvider />
         <Analytics />
+        {/* Google Analytics 4 (gtag). Handles pageviews across client-side
+            navigation automatically. ID via env, with the project's own
+            measurement ID as the fallback so it works without extra config. */}
+        <GoogleAnalytics
+          gaId={process.env.NEXT_PUBLIC_GA_ID ?? "G-BG89SQGW2R"}
+        />
         {/* JSON-LD: Organization + WebSite (spec §12) */}
         <script
           type="application/ld+json"
