@@ -13,6 +13,17 @@ import { site } from "@/lib/site";
  */
 const FROM = "Sapiens <onboarding@resend.dev>";
 
+/* escape user-supplied text before putting it in email HTML — stops a
+   submitted message/name/city from injecting links or markup into the
+   owner's notification email */
+function esc(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 function getResend(): Resend | null {
   const key = process.env.RESEND_API_KEY;
   return key ? new Resend(key) : null;
@@ -62,7 +73,10 @@ export async function notifyOwner(subject: string, fields: Record<string, string
   if (!resend) return;
   const rows = Object.entries(fields)
     .filter(([, v]) => v)
-    .map(([k, v]) => `<tr><td style="padding:4px 12px 4px 0;font-weight:bold">${k}</td><td>${v}</td></tr>`)
+    .map(
+      ([k, v]) =>
+        `<tr><td style="padding:4px 12px 4px 0;font-weight:bold">${esc(k)}</td><td>${esc(v!)}</td></tr>`
+    )
     .join("");
   try {
     await resend.emails.send({
