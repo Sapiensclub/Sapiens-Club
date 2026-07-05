@@ -6,12 +6,11 @@ import { site } from "@/lib/site";
  * background, ink text, spark button. Email failures are logged but never
  * fail the API request: a signup is stored even if the email bounces.
  *
- * NOTE: until the sapiens.club domain is verified in Resend, the from
- * address must stay onboarding@resend.dev (Resend's sandbox sender, which
- * can only deliver to the account owner's inbox). After verifying the
- * domain, change FROM to e.g. "Sapiens <hello@sapiens.club>".
+ * The sapiens.club domain is verified in Resend (July 2026), so we send
+ * from hello@sapiens.club and can deliver to anyone. Replies go to the
+ * real contact inbox via reply_to.
  */
-const FROM = "Sapiens <onboarding@resend.dev>";
+const FROM = "Sapiens <hello@sapiens.club>";
 
 /* escape user-supplied text before putting it in email HTML — stops a
    submitted message/name/city from injecting links or markup into the
@@ -48,6 +47,7 @@ export async function sendWaitlistConfirmation(to: string) {
     await resend.emails.send({
       from: FROM,
       to,
+      replyTo: site.contactEmail, // subscriber replies reach a real inbox
       subject: "Welcome, Sapiens 🌱",
       html: shell(`
         <h1 style="font-size:22px;margin:0 0 16px">You're in.</h1>
