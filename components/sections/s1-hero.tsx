@@ -1,4 +1,3 @@
-import { LogoAnimated } from "@/components/logo-animated";
 import { ButtonLink } from "@/components/buttons";
 import { Marquee } from "@/components/marquee";
 import { Doodle } from "@/components/doodles/doodle";
@@ -63,7 +62,7 @@ export async function S1Hero() {
         <HeroParallax className="relative mx-auto flex w-full max-w-6xl flex-1 items-center px-6 py-14">
           {/* headline block, center-left on desktop */}
           <div className="relative z-10 flex max-w-2xl flex-col items-start gap-6 lg:w-[60%]">
-            <LogoAnimated className="h-28 w-auto md:h-36" />
+            {/* logo removed — it now lives once, in the minimal hero above */}
             <h1 className="hero-title">
               {HEADLINE_BEFORE.map((w, i) => (
                 <Word key={i} text={w} index={i} />

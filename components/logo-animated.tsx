@@ -30,10 +30,10 @@ export function LogoAnimated({ className = "" }: { className?: string }) {
   const [mode, setMode] = useState<"static" | "play">("static");
 
   /*
-   * The intro starts only when the logo scrolls INTO VIEW (it sits in the
-   * living-doodle hero, below the minimal hero) — otherwise it would play
-   * unseen on page load. html gets .intro-live while playing so the
-   * headline sequence can wait for it (see globals.css).
+   * The intro starts when the logo scrolls into view. It lives in the
+   * minimal hero (top of the page), so on the homepage it fires on load;
+   * the IntersectionObserver keeps it correct anywhere else it's used.
+   * It no longer couples to the S1 headline (they're separate sections now).
    */
   useEffect(() => {
     const reduced = window.matchMedia(
@@ -55,7 +55,6 @@ export function LogoAnimated({ className = "" }: { className?: string }) {
         if (!entry.isIntersecting) return;
         io.disconnect();
         sessionStorage.setItem("sapiens_intro_seen", "1");
-        document.documentElement.classList.add("intro-live");
         setMode("play");
         timer = setTimeout(finish, 2600);
         window.addEventListener("scroll", skip, { once: true, passive: true });

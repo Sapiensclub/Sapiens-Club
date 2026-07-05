@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ButtonLink } from "@/components/buttons";
-import { LogoMark } from "@/components/logo";
+import { LogoAnimated } from "@/components/logo-animated";
 import { ArrowCurved } from "@/components/doodles/basics";
 import { getMinimalHero } from "@/sanity/content";
 
@@ -26,10 +26,9 @@ export async function S0MinimalHero() {
           className="h-32 w-auto md:h-44"
         />
       ) : (
-        <LogoMark
-          className="h-32 w-auto md:h-44"
-          title={`${hero.wordmark} footprint logo`}
-        />
+        /* the once-per-session footprint intro animation (spec §3) lives
+           here now — the first thing a visitor sees, playing on load */
+        <LogoAnimated className="h-32 w-auto md:h-44" />
       )}
 
       <p className="font-display text-6xl font-bold tracking-wide md:text-7xl">
