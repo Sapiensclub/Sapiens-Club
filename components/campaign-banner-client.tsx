@@ -18,7 +18,9 @@ const DISMISS_KEY = "sapiens-banner-dismissed";
 const THEMES = {
   spark: {
     wrap: "bg-spark text-night",
-    cta: "bg-night text-paper hover:opacity-85",
+    /* text-[#F7F4EC] (constant light), NOT text-paper — in night mode
+       --color-paper flips dark and the button label would vanish */
+    cta: "bg-night text-[#F7F4EC] hover:opacity-85",
     dismiss: "text-night/70 hover:text-night",
   },
   indigo: {
