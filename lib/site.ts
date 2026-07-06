@@ -12,6 +12,8 @@ export const site = {
   launchLine: "Launching in India, 2026.",
   contactEmail: "sapiensclub1@gmail.com",
   volunteerFormUrl: "https://forms.gle/nK73qW328F6WkQjPA",
+  /* hero footprint easter-egg — code-level fallback; CMS overrides live */
+  footprintEffectEnabled: true,
   instagramUrl: "https://www.instagram.com/sapiens.club_/",
   youtubeUrl: "https://www.youtube.com/channel/UC3k3-4i8uhwbmzCQIZ3NBGA",
   twitterUrl: "https://x.com/Sapiens_Clubb",

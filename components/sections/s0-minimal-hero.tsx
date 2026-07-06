@@ -2,7 +2,8 @@ import Image from "next/image";
 import { ButtonLink } from "@/components/buttons";
 import { LogoAnimated } from "@/components/logo-animated";
 import { ArrowCurved } from "@/components/doodles/basics";
-import { getMinimalHero } from "@/sanity/content";
+import { FootprintTrail } from "@/components/hero/FootprintTrail";
+import { getMinimalHero, getSiteSettings } from "@/sanity/content";
 
 /*
  * S0 · MINIMAL HERO (owner request, July 2026): the first thing visitors
@@ -13,9 +14,11 @@ import { getMinimalHero } from "@/sanity/content";
  * directly below, unchanged.
  */
 export async function S0MinimalHero() {
-  const hero = await getMinimalHero();
+  const [hero, site] = await Promise.all([getMinimalHero(), getSiteSettings()]);
   return (
-    <section className="relative flex min-h-[calc(100vh-64px)] flex-col items-center justify-center gap-7 px-6 text-center">
+    /* `isolate` contains the footprint effect's -z-10 canvas to this hero */
+    <section className="relative isolate flex min-h-[calc(100vh-64px)] flex-col items-center justify-center gap-7 px-6 text-center">
+      <FootprintTrail variant="night" enabled={site.footprintEffectEnabled} />
       {hero.logoUrl && hero.logoWidth && hero.logoHeight ? (
         <Image
           src={hero.logoUrl}

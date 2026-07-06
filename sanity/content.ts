@@ -35,7 +35,8 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   const cms = await cmsFetch<Partial<SiteSettings> | null>(
     groq`*[_type == "siteSettings"][0]{
       taglineVision, taglineHook, launchLine, contactEmail, volunteerFormUrl,
-      instagramUrl, youtubeUrl, twitterUrl, marqueeItems, cities, announcement
+      instagramUrl, youtubeUrl, twitterUrl, marqueeItems, cities, announcement,
+      footprintEffectEnabled
     }`,
     null
   );

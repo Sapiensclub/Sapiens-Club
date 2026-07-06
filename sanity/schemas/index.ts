@@ -48,6 +48,14 @@ export const siteSettings = defineType({
       type: "string",
       description: "Shown at the very top of every page when filled in. Leave empty to hide.",
     }),
+    defineField({
+      name: "footprintEffectEnabled",
+      title: "Footprint hero effect",
+      type: "boolean",
+      initialValue: true,
+      description:
+        "The hidden footprint/torch easter-egg on the homepage hero. Turn off to disable it live, everywhere, instantly.",
+    }),
   ],
 });
 
