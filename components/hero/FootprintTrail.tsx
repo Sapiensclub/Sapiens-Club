@@ -5,10 +5,16 @@ import { useEffect, useRef, useState } from "react";
 /*
  * FOOTPRINT TRAIL — hidden hero easter-egg (owner request, July 2026).
  *
- * Move the cursor (or drag a finger) across the hero: night falls softly
- * around a torch-beam of light at the pointer, and glowing footprints are
- * stamped along the path — alternating left/right, facing the direction of
- * travel — then dissolve back into the dark. Idle = completely invisible.
+ * Move the cursor (or drag a finger) across the hero and footprints are
+ * stamped along the path — alternating left/right, facing the direction
+ * of travel — then gently fade. Idle = completely invisible.
+ *
+ * Two variants (see VARIANTS below):
+ *   'day'   — mounted on the light hero now: soft ink prints pressed into
+ *             the paper; NO scrim, NO darkening of any kind.
+ *   'night' — kept ready for a dark section later: an indigo night scrim
+ *             blooms in with a torch-beam of light at the pointer, and the
+ *             prints glow white, dissolving into the dark.
  *
  * EASY DISABLE: Studio → Site settings → "Footprint hero effect" (live,
  * no deploy), or flip FEATURE_FALLBACK_ENABLED below. When disabled the
@@ -52,8 +58,8 @@ const FEATURE_FALLBACK_ENABLED = true;
  * 'night' (wired now): dark scrim + torch + white/glowing prints.
  * 'day' (LATER — stub, unwired): NO scrim, NO torch; ink prints (#141414)
  *   pressed into the paper along the path, same stamping/alternating
- *   logic. To wire it, mount <FootprintTrail variant="day" /> — the
- *   styling below is ready; only night has been hand-tuned so far.
+ *   logic. Both variants are fully implemented — day is mounted on the
+ *   light hero; night is kept ready for a dark section later.
  */
 type Variant = "night" | "day";
 const VARIANTS: Record<
@@ -74,13 +80,16 @@ const VARIANTS: Record<
     glow: "#CDD6FF", // moonlight halo around each print
   },
   day: {
-    scrim: false,
+    scrim: false, // no darkening at all — the paper stays daylight
     scrimInner: [0, 0, 0],
     scrimOuter: [0, 0, 0],
     print: "#141414", // ink pressed into the paper
     glow: "",
   },
 };
+
+/* day prints never hit full black — pressed ink, not a stamp pad */
+const DAY_PRINT_ALPHA = 0.55;
 
 /* simple foot-sole silhouette (right foot, toes up, height 1 unit).
    Mirrored with scale(-1,1) for the left foot. */
@@ -237,8 +246,13 @@ export function FootprintTrail({
       /* pointer went still → let the night fade back out */
       if (torch.target === 1 && t - lastMoveAt > STOP_DELAY_MS) torch.target = 0;
 
-      /* ease the scrim toward its target */
-      if (torch.alpha < torch.target)
+      /* ease the scrim toward its target (scrim variants only — day has
+         no darkening, and keeping alpha at 0 lets the loop park as soon
+         as the last print fades) */
+      if (!v.scrim) {
+        torch.alpha = 0;
+        torch.target = 0;
+      } else if (torch.alpha < torch.target)
         torch.alpha = Math.min(torch.target, torch.alpha + dt / SCRIM_FADE_IN_MS);
       else if (torch.alpha > torch.target)
         torch.alpha = Math.max(torch.target, torch.alpha - dt / SCRIM_FADE_OUT_MS);
@@ -299,14 +313,17 @@ export function FootprintTrail({
         );
         let a = ain * aout;
         if (v.scrim) {
-          /* prints live in the dark: dissolve with the scrim, dim inside
-             the content halo, glow a touch brighter near the torch */
+          /* night: prints live in the dark — dissolve with the scrim, dim
+             inside the content halo, glow a touch brighter near the torch */
           a *= Math.min(1, torch.alpha * 1.25);
           const hx = (pr.x - w / 2) / HALO_RX;
           const hy = (pr.y - h / 2) / HALO_RY;
           a *= Math.min(1, 0.15 + 0.85 * (hx * hx + hy * hy));
           const dTorch = Math.hypot(pr.x - torch.x, pr.y - torch.y);
           a *= 0.55 + 0.45 * Math.max(0, 1 - dTorch / (TORCH_RADIUS * 1.6));
+        } else {
+          /* day: soft pressed-ink prints, no other modifiers */
+          a *= DAY_PRINT_ALPHA;
         }
         if (a <= 0.01) continue;
         ctx.save();

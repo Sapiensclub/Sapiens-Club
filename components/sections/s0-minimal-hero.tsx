@@ -18,7 +18,7 @@ export async function S0MinimalHero() {
   return (
     /* `isolate` contains the footprint effect's -z-10 canvas to this hero */
     <section className="relative isolate flex min-h-[calc(100vh-64px)] flex-col items-center justify-center gap-7 px-6 text-center">
-      <FootprintTrail variant="night" enabled={site.footprintEffectEnabled} />
+      <FootprintTrail variant="day" enabled={site.footprintEffectEnabled} />
       {hero.logoUrl && hero.logoWidth && hero.logoHeight ? (
         <Image
           src={hero.logoUrl}
