@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { blogSchemaTypes } from "./blog";
 
 /*
  * Sanity schemas (spec §9). Everything the owner edits lives here.
@@ -567,4 +568,6 @@ export const schemaTypes = [
   pageClub,
   pageIntro,
   shopTeaseItem,
+  /* blog (author, category, blogPost) — see ./blog.ts */
+  ...blogSchemaTypes,
 ];
