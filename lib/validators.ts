@@ -9,7 +9,7 @@ export const waitlistSchema = z.object({
   email: z.string().trim().toLowerCase().email().max(320),
   phone: z.string().trim().max(32).optional().or(z.literal("")),
   city: z.string().trim().max(80).optional().or(z.literal("")),
-  source: z.enum(["hero", "club", "shop", "closing"]).default("hero"),
+  source: z.enum(["hero", "club", "shop", "closing", "blog"]).default("hero"),
   consent: z.literal(true),
   website: z.string().optional(),
 });

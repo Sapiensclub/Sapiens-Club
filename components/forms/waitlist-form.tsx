@@ -18,7 +18,7 @@ export function WaitlistForm({
   buttonLabel = "Count me in",
   cities,
 }: {
-  source?: "hero" | "club" | "shop" | "closing";
+  source?: "hero" | "club" | "shop" | "closing" | "blog";
   emailOnly?: boolean;
   buttonLabel?: string;
   cities?: readonly string[];

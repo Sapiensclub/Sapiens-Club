@@ -45,6 +45,35 @@ export function blockText(value: unknown): string {
   return (children ?? []).map((c) => c.text ?? "").join("");
 }
 
+export type Heading = { id: string; text: string; level: 2 | 3 };
+
+/**
+ * Headings for the Table of Contents — read from the same body blocks the
+ * renderers use, with the same ids, so the TOC links can never drift.
+ */
+export function extractHeadings(body: unknown): Heading[] {
+  if (!Array.isArray(body)) return [];
+  const out: Heading[] = [];
+  for (const b of body) {
+    const blk = b as { _type?: string; style?: string };
+    if (blk?._type !== "block") continue;
+    if (blk.style !== "h2" && blk.style !== "h3") continue;
+    const text = blockText(b);
+    if (!text) continue;
+    out.push({ id: headingId(text), text, level: blk.style === "h2" ? 2 : 3 });
+  }
+  return out;
+}
+
+/** In-article FAQ items — feeds FAQPage structured data in stage 6. */
+export function extractFaqs(body: unknown): { question: string; answer: string }[] {
+  if (!Array.isArray(body)) return [];
+  return body.flatMap((b) => {
+    const blk = b as { _type?: string; items?: { question: string; answer: string }[] };
+    return blk?._type === "faq" ? (blk.items ?? []) : [];
+  });
+}
+
 function CaptionedImage({ value, priority = false }: { value: ImgValue; priority?: boolean }) {
   if (!value?.url || !value.w || !value.h) return null;
   return (

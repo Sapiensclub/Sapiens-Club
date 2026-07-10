@@ -40,13 +40,28 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false }, { status: 500 });
   }
 
-  const { error } = await db.from("waitlist").insert({
+  const row = {
     email,
     phone: phone || null,
     city: city || null,
     source,
     consent: true,
-  });
+  };
+
+  let { error } = await db.from("waitlist").insert(row);
+
+  /*
+   * 23514 = the table's CHECK constraint doesn't know this source yet
+   * (e.g. 'blog' before supabase/003_add_blog_source.sql has been run).
+   * Never lose a real signup over it — store it under 'closing' and warn.
+   * This fallback becomes dead code once that migration is applied.
+   */
+  if (error?.code === "23514") {
+    console.warn(
+      `[waitlist] source '${source}' rejected by DB constraint — run supabase/003_add_blog_source.sql. Storing as 'closing'.`
+    );
+    ({ error } = await db.from("waitlist").insert({ ...row, source: "closing" }));
+  }
 
   if (error) {
     // 23505 = unique violation: already subscribed → generic success
