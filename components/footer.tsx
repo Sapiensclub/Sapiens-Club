@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getSiteSettings } from "@/sanity/content";
+import { getPublishedPostCount } from "@/sanity/blog";
 import { LogoMark } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
 import {
@@ -25,7 +26,14 @@ const FOOT_NAV = [
 ];
 
 export async function Footer() {
-  const site = await getSiteSettings();
+  const [site, blogPostCount] = await Promise.all([
+    getSiteSettings(),
+    getPublishedPostCount(),
+  ]);
+  /* blog link appears once a post is published (Blog Build Spec §5) */
+  const footNav = blogPostCount
+    ? [...FOOT_NAV.slice(0, 3), { label: "Blog", href: "/blog" }, ...FOOT_NAV.slice(3)]
+    : FOOT_NAV;
   return (
     <footer className="relative bg-dawn text-ink">
       <div className="mx-auto max-w-6xl space-y-10 px-6 py-14">
@@ -40,7 +48,7 @@ export async function Footer() {
         {/* Row 2: nav */}
         <nav aria-label="Footer">
           <ul className="flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-sm font-semibold">
-            {FOOT_NAV.map(({ label, href }) => (
+            {footNav.map(({ label, href }) => (
               <li key={label}>
                 <Link href={href} className="hover:text-clay">
                   {label}

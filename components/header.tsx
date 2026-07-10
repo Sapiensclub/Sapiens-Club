@@ -21,7 +21,14 @@ const NAV = [
   { label: "Contact", href: "/contact" },
 ];
 
-export function Header() {
+/* blog link sits between HOW and CLUB, and only once a post is published
+   (Blog Build Spec §5). `showBlog` comes from the server layout. */
+const BLOG_LINK = { label: "Blog", href: "/blog" };
+
+export function Header({ showBlog = false }: { showBlog?: boolean }) {
+  const nav = showBlog
+    ? [...NAV.slice(0, 3), BLOG_LINK, ...NAV.slice(3)]
+    : NAV;
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [night, setNight] = useState(false);
@@ -85,7 +92,7 @@ export function Header() {
 
         {/* desktop nav */}
         <nav aria-label="Main" className="hidden items-center gap-7 md:flex">
-          {NAV.map(({ label, href }) => {
+          {nav.map(({ label, href }) => {
             const active = pathname === href;
             return (
               <Link
@@ -145,7 +152,7 @@ export function Header() {
       {open && (
         <div className="fixed inset-0 top-[64px] z-30 flex flex-col gap-2 overflow-y-auto bg-paper px-8 pt-10 pb-16 text-ink md:hidden">
           <nav aria-label="Mobile" className="flex flex-col gap-6">
-            {[...NAV, { label: "Shop", href: "/shop" }].map(
+            {[...nav, { label: "Shop", href: "/shop" }].map(
               ({ label, href }, idx) => (
                 <Link
                   key={href}

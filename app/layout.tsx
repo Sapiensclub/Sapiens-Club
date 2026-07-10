@@ -8,6 +8,7 @@ import { HideOnStudio } from "@/components/hide-on-studio";
 import { CampaignBanner } from "@/components/campaign-banner";
 import { AnalyticsProvider } from "@/components/analytics";
 import { getSiteSettings } from "@/sanity/content";
+import { getPublishedPostCount } from "@/sanity/blog";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -42,7 +43,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { announcement } = await getSiteSettings();
+  const [{ announcement }, blogPostCount] = await Promise.all([
+    getSiteSettings(),
+    getPublishedPostCount(),
+  ]);
   return (
     <html
       lang="en"
@@ -73,7 +77,7 @@ export default async function RootLayout({
             </div>
           )}
           <CampaignBanner />
-          <Header />
+          <Header showBlog={blogPostCount > 0} />
         </HideOnStudio>
         <main id="content">{children}</main>
         <HideOnStudio>

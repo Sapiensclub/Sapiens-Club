@@ -25,7 +25,12 @@ const BLOG_DESCRIPTION =
 export const metadata: Metadata = {
   title: "The Sapiens Blog — real help, safety & community",
   description: BLOG_DESCRIPTION,
-  alternates: { canonical: "/blog" },
+  alternates: {
+    canonical: "/blog",
+    types: {
+      "application/rss+xml": [{ url: "/blog/rss.xml", title: "The Sapiens Blog" }],
+    },
+  },
   openGraph: {
     type: "website",
     url: "/blog",
