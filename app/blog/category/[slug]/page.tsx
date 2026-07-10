@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Breadcrumb } from "@/components/blog/breadcrumb";
+import { Breadcrumb, type Crumb } from "@/components/blog/breadcrumb";
 import { CategoryFilter } from "@/components/blog/category-filter";
 import { PostGrid } from "@/components/blog/post-card";
+import {
+  JsonLd,
+  breadcrumbSchema,
+  collectionPageSchema,
+  SITE_OG_IMAGE,
+} from "@/components/blog/json-ld";
 import {
   getAllBlogSlugs,
   getBlogCategories,
@@ -29,11 +35,25 @@ export async function generateMetadata({
   const { slug } = await params;
   const data = await getCategoryWithPosts(slug);
   if (!data) return { title: "Category not found" };
+
+  const title = `${data.category.title} — The Sapiens Blog`;
+  const description =
+    data.category.description ??
+    `Posts about ${data.category.title} from the Sapiens blog.`;
+  const canonical = `/blog/category/${data.category.slug}`;
+
   return {
-    title: `${data.category.title} — The Sapiens Blog`,
-    description:
-      data.category.description ??
-      `Posts about ${data.category.title} from the Sapiens blog.`,
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      type: "website",
+      url: canonical,
+      title,
+      description,
+      images: [{ url: SITE_OG_IMAGE, width: 1200, height: 630 }],
+    },
+    twitter: { card: "summary_large_image", title, description, images: [SITE_OG_IMAGE] },
   };
 }
 
@@ -50,15 +70,18 @@ export default async function CategoryPage({
   if (!data) notFound();
   const { category, posts } = data;
 
+  const crumbs: Crumb[] = [
+    { label: "Home", href: "/" },
+    { label: "Blog", href: "/blog" },
+    { label: category.title },
+  ];
+
   return (
     <div className="mx-auto max-w-6xl px-6 py-14">
-      <Breadcrumb
-        items={[
-          { label: "Home", href: "/" },
-          { label: "Blog", href: "/blog" },
-          { label: category.title },
-        ]}
-      />
+      <JsonLd data={collectionPageSchema(category, posts.length)} />
+      <JsonLd data={breadcrumbSchema(crumbs)} />
+
+      <Breadcrumb items={crumbs} />
 
       <header className="mt-10 text-center">
         <h1>{category.title}</h1>

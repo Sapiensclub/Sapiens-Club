@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Breadcrumb } from "@/components/blog/breadcrumb";
+import { Breadcrumb, type Crumb } from "@/components/blog/breadcrumb";
 import { AuthorAvatar, PostGrid } from "@/components/blog/post-card";
+import {
+  JsonLd,
+  breadcrumbSchema,
+  profilePageSchema,
+  SITE_OG_IMAGE,
+} from "@/components/blog/json-ld";
 import { getAllBlogSlugs, getAuthorWithPosts } from "@/sanity/blog";
 
 /*
@@ -24,10 +30,29 @@ export async function generateMetadata({
   const { slug } = await params;
   const data = await getAuthorWithPosts(slug);
   if (!data) return { title: "Author not found" };
+
+  const title = `${data.author.name} — author at Sapiens`;
+  const description =
+    data.author.bio ?? `Posts written by ${data.author.name} on the Sapiens blog.`;
+  const canonical = `/blog/author/${data.author.slug}`;
+
   return {
-    title: `${data.author.name} — author at Sapiens`,
-    description:
-      data.author.bio ?? `Posts written by ${data.author.name} on the Sapiens blog.`,
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      type: "profile",
+      url: canonical,
+      title,
+      description,
+      images: [data.author.avatarUrl ?? SITE_OG_IMAGE],
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+      images: [data.author.avatarUrl ?? SITE_OG_IMAGE],
+    },
   };
 }
 
@@ -42,15 +67,18 @@ export default async function AuthorPage({
   const { author, posts } = data;
   const socials = (author.social ?? []).filter((s) => s.url);
 
+  const crumbs: Crumb[] = [
+    { label: "Home", href: "/" },
+    { label: "Blog", href: "/blog" },
+    { label: author.name },
+  ];
+
   return (
     <div className="mx-auto max-w-5xl px-6 py-14">
-      <Breadcrumb
-        items={[
-          { label: "Home", href: "/" },
-          { label: "Blog", href: "/blog" },
-          { label: author.name },
-        ]}
-      />
+      <JsonLd data={profilePageSchema(author)} />
+      <JsonLd data={breadcrumbSchema(crumbs)} />
+
+      <Breadcrumb items={crumbs} />
 
       <header className="sketch-border mt-10 flex flex-col items-center gap-5 border-2 border-ink/50 px-8 py-10 text-center">
         <AuthorAvatar name={author.name} avatarUrl={author.avatarUrl} size={96} />

@@ -4,6 +4,7 @@ import { SparkleA } from "@/components/doodles/basics";
 import { CategoryFilter } from "@/components/blog/category-filter";
 import { FeaturedPostCard, PostGrid } from "@/components/blog/post-card";
 import { Pagination } from "@/components/blog/pagination";
+import { JsonLd, blogSchema, SITE_OG_IMAGE } from "@/components/blog/json-ld";
 import {
   getBlogCategories,
   getFeaturedPost,
@@ -18,10 +19,26 @@ import {
  */
 export const revalidate = 3600;
 
+const BLOG_DESCRIPTION =
+  "Stories, safety thinking and the science of kindness from the people building Sapiens — a society where helping each other is the default.";
+
 export const metadata: Metadata = {
   title: "The Sapiens Blog — real help, safety & community",
-  description:
-    "Stories, safety thinking and the science of kindness from the people building Sapiens — a society where helping each other is the default.",
+  description: BLOG_DESCRIPTION,
+  alternates: { canonical: "/blog" },
+  openGraph: {
+    type: "website",
+    url: "/blog",
+    title: "The Sapiens Blog — real help, safety & community",
+    description: BLOG_DESCRIPTION,
+    images: [{ url: SITE_OG_IMAGE, width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "The Sapiens Blog — real help, safety & community",
+    description: BLOG_DESCRIPTION,
+    images: [SITE_OG_IMAGE],
+  },
 };
 
 /* not exported — Next.js page files may only export its reserved keys */
@@ -38,6 +55,8 @@ export default async function BlogIndex() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-20">
+      <JsonLd data={blogSchema(BLOG_DESCRIPTION)} />
+
       {/* page header */}
       <header className="relative text-center">
         <Doodle className="absolute -top-6 right-4 hidden w-12 text-spark sm:block">

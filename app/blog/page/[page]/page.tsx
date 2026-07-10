@@ -35,6 +35,9 @@ export async function generateMetadata({
     title: `The Sapiens Blog — page ${page}`,
     description:
       "More stories, safety thinking and the science of kindness from the people building Sapiens.",
+    /* each paginated page is its own canonical — never point them all at
+       /blog, which would tell Google their posts don't deserve indexing */
+    alternates: { canonical: `/blog/page/${page}` },
   };
 }
 

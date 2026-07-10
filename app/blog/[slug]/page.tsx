@@ -2,9 +2,16 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Breadcrumb } from "@/components/blog/breadcrumb";
+import { Breadcrumb, type Crumb } from "@/components/blog/breadcrumb";
 import { AuthorAvatar, formatDate } from "@/components/blog/post-card";
-import { BlogBody, extractHeadings } from "@/components/blog/portable";
+import { BlogBody, extractHeadings, extractFaqs } from "@/components/blog/portable";
+import {
+  JsonLd,
+  blogPostingSchema,
+  breadcrumbSchema,
+  faqPageSchema,
+  ogImageUrl,
+} from "@/components/blog/json-ld";
 import { TableOfContents } from "@/components/blog/toc";
 import { ShareRow } from "@/components/blog/share-row";
 import { AuthorCard } from "@/components/blog/author-card";
@@ -38,9 +45,29 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return { title: "Post not found" };
+
+  const title = post.seo?.metaTitle || post.title;
+  const description = post.seo?.metaDescription || post.excerpt;
+  const canonical = `/blog/${post.slug}`;
+  /* always an image: the post's own, else the site's generated share card */
+  const image = ogImageUrl(post.seo?.ogImageUrl || post.cover?.url);
+
   return {
-    title: post.seo?.metaTitle || post.title,
-    description: post.seo?.metaDescription || post.excerpt,
+    title,
+    description,
+    ...(post.tags?.length ? { keywords: post.tags } : {}),
+    alternates: { canonical },
+    openGraph: {
+      type: "article",
+      url: canonical,
+      title,
+      description,
+      publishedTime: post.publishedAt,
+      modifiedTime: post.updatedAt || post.publishedAt,
+      ...(post.authorFull ? { authors: [post.authorFull.name] } : {}),
+      images: [{ url: image, width: 1200, height: 630 }],
+    },
+    twitter: { card: "summary_large_image", title, description, images: [image] },
   };
 }
 
@@ -60,27 +87,33 @@ export default async function BlogPostPage({
     ? await getRelatedPosts(post.category.slug, post.slug)
     : [];
   const url = `${site.url}/blog/${post.slug}`;
+  const faqs = extractFaqs(post.body);
+
+  /* one source of truth: the visible trail and its BreadcrumbList schema */
+  const crumbs: Crumb[] = [
+    { label: "Home", href: "/" },
+    { label: "Blog", href: "/blog" },
+    ...(post.category
+      ? [
+          {
+            label: post.category.title,
+            href: `/blog/category/${post.category.slug}`,
+          },
+        ]
+      : []),
+    { label: post.title },
+  ];
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-14">
+      <JsonLd data={blogPostingSchema(post)} />
+      <JsonLd data={breadcrumbSchema(crumbs)} />
+      {faqs.length > 0 && <JsonLd data={faqPageSchema(faqs)} />}
+
       {/* sticky TOC rail on desktop; the article stays a comfortable measure */}
       <div className="lg:grid lg:grid-cols-[minmax(0,70ch)_220px] lg:justify-center lg:gap-14">
         <article className="min-w-0">
-          <Breadcrumb
-            items={[
-              { label: "Home", href: "/" },
-              { label: "Blog", href: "/blog" },
-              ...(post.category
-                ? [
-                    {
-                      label: post.category.title,
-                      href: `/blog/category/${post.category.slug}`,
-                    },
-                  ]
-                : []),
-              { label: post.title },
-            ]}
-          />
+          <Breadcrumb items={crumbs} />
 
           <header className="mt-8">
             {post.category && (
