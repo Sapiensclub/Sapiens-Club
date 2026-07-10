@@ -25,11 +25,17 @@ function Svg({
   viewBox,
   className,
   title,
+  preserveAspectRatio,
   children,
-}: DoodleProps & { viewBox: string; children: React.ReactNode }) {
+}: DoodleProps & {
+  viewBox: string;
+  preserveAspectRatio?: string;
+  children: React.ReactNode;
+}) {
   return (
     <svg
       viewBox={viewBox}
+      preserveAspectRatio={preserveAspectRatio}
       className={className}
       role={title ? "img" : undefined}
       aria-hidden={title ? undefined : true}
@@ -261,12 +267,20 @@ export function DiyaDoodle(p: DoodleProps) {
 }
 
 /* Hand-drawn squiggle used as the active-page underline in the nav. */
+/*
+ * Active-nav underline. preserveAspectRatio="none" lets it stretch to any
+ * word width without growing taller, and vector-effect keeps the stroke a
+ * constant thickness — otherwise a long label ("The Science of Kindness")
+ * scales the SVG up and draws a much fatter line than a short one ("All").
+ * Callers must set a height (e.g. `h-2.5 w-full`).
+ */
 export function SquiggleUnderline(p: DoodleProps) {
   return (
-    <Svg viewBox="0 0 80 10" {...p}>
+    <Svg viewBox="0 0 80 10" preserveAspectRatio="none" {...p}>
       <path
         {...S}
-        strokeWidth={3}
+        strokeWidth={2.5}
+        vectorEffect="non-scaling-stroke"
         d="M3 6 C15 2 25 9 38 5 C51 1 63 8 77 4"
       />
     </Svg>

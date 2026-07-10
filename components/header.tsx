@@ -103,7 +103,7 @@ export function Header({ showBlog = false }: { showBlog?: boolean }) {
               >
                 {label}
                 {active && (
-                  <SquiggleUnderline className="absolute -bottom-2 left-0 w-full text-spark" />
+                  <SquiggleUnderline className="absolute -bottom-2 left-0 h-2.5 w-full text-spark" />
                 )}
               </Link>
             );

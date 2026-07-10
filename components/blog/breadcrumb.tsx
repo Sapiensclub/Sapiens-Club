@@ -7,20 +7,36 @@ import Link from "next/link";
  */
 export type Crumb = { label: string; href?: string };
 
+/*
+ * Stays on a single line: the parent crumbs never shrink, and the final
+ * crumb (often a long post title) truncates with an ellipsis. Previously a
+ * long title wrapped, stranding a "/" at the end of the first line.
+ */
 export function Breadcrumb({ items }: { items: Crumb[] }) {
   return (
     <nav aria-label="Breadcrumb" className="text-sm opacity-75">
-      <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
+      <ol className="flex items-center gap-2 overflow-hidden whitespace-nowrap">
         {items.map((item, i) => {
           const last = i === items.length - 1;
           return (
-            <li key={item.label} className="flex items-center gap-2">
+            <li
+              key={item.label}
+              className={
+                last
+                  ? "flex min-w-0 items-center gap-2"
+                  : "flex shrink-0 items-center gap-2"
+              }
+            >
               {item.href && !last ? (
                 <Link href={item.href} className="hover:text-clay">
                   {item.label}
                 </Link>
               ) : (
-                <span aria-current={last ? "page" : undefined} className="line-clamp-1">
+                <span
+                  aria-current={last ? "page" : undefined}
+                  className="truncate"
+                  title={last ? item.label : undefined}
+                >
                   {item.label}
                 </span>
               )}
